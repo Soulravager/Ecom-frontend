@@ -4,7 +4,7 @@
   >
     <div><Header /></div>
     <div>
-      <h1 class="text-4xl font-bold mb-4 pt-20 px-1">About Us</h1>
+      <h1 class="text-4xl font-bold mb-4"><center>About Us</center></h1>
       <p class="text-lg max-w-2xl text-center"></p>
     </div>
   </div>

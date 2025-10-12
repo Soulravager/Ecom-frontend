@@ -1,19 +1,21 @@
 <template>
-  <header class="bg-white shadow w-full fixed top-0 left-0 z-50">
+  <header class="bg-white shadow w-full sticky top-0 left-0 z-50">
     <div class="flex justify-between items-center h-16 px-4 md:px-10">
-      <!-- LOGO place  -->
+      <!-- LOGO place -->
+
       <a href="#" class="text-2xl font-extrabold text-indigo-600">E-COM</a>
 
+      <!--Button-->
       <button
         @click="open = !open"
         aria-label="Toggle menu"
         class="block text-2xl cursor-pointer border border-gray-300 bg-white text-indigo-600 px-3 py-2 md:hidden rounded-md shadow-sm hover:bg-gray-50"
-        :style="{ backgroundColor: '#ffffff' }"
       >
         <i v-if="!open" class="fa fa-bars"></i>
         <i v-else class="fa fa-times"></i>
       </button>
 
+      <!-- Desktop Nav -->
       <nav class="hidden md:flex items-center space-x-6">
         <a href="/home" class="text-gray-700 hover:text-indigo-600">Home</a>
         <a href="#" class="text-gray-700 hover:text-indigo-600">Products</a>
@@ -36,6 +38,7 @@
       </nav>
     </div>
 
+    <!-- Mobile -->
     <transition name="fade">
       <div v-show="open" class="md:hidden bg-white border-t w-full">
         <div class="px-6 py-4 space-y-2">
