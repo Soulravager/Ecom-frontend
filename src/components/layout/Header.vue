@@ -3,7 +3,7 @@
     <div class="flex justify-between items-center h-16 px-4 md:px-10">
       <!-- LOGO place -->
 
-      <a href="#" class="text-2xl font-extrabold text-indigo-600">E-COM</a>
+      <MainLogo />
 
       <!--Button-->
       <button
@@ -63,6 +63,8 @@
 
 <script setup>
 import { ref } from "vue";
+import MainLogo from "./Main_logo.vue";
+
 const open = ref(false);
 </script>
 
