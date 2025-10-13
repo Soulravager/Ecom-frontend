@@ -1,10 +1,15 @@
 <template>
   <div
-    class="min-h-screen flex flex-col items-center justify-center bg-sky-400 text-gray-100"
+    class="flex flex-col min-h-screen w-screen bg-sky-400 text-gray-100 overflow-x-hidden"
   >
-    <h1 class="text-4xl font-bold mb-4">Contact</h1>
+    <div><Header /></div>
+    <h1 class="text-4xl font-bold mb-4"><center>Contact</center></h1>
     <p class="text-lg max-w-2xl text-center"></p>
+    <Footer />
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import Header from "../components/layout/Header.vue";
+import Footer from "../components/layout/Footer.vue";
+</script>
