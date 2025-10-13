@@ -17,7 +17,7 @@
 
       <!-- Desktop Nav -->
       <nav class="hidden md:flex items-center space-x-6">
-        <a href="/home" class="text-gray-700 hover:text-indigo-600">Home</a>
+        <a href="/" class="text-gray-700 hover:text-indigo-600">Home</a>
         <a href="/Product" class="text-gray-700 hover:text-indigo-600"
           >Products</a
         >
@@ -38,7 +38,7 @@
     <transition name="fade">
       <div v-show="open" class="md:hidden bg-white border-t w-full">
         <div class="px-6 py-4 space-y-2">
-          <a href="/home" class="block text-gray-700 py-2">Home</a>
+          <a href="/" class="block text-gray-700 py-2">Home</a>
           <a href="/Product" class="block text-gray-700 py-2">Products</a>
           <a href="/about" class="block text-gray-700 py-2">About</a>
           <a href="/contact" class="block text-gray-700 py-2">Contact</a>

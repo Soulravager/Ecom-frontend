@@ -1,5 +1,5 @@
 <template>
-  <a href="/home" class="flex items-center space-x-2">
+  <a href="/" class="flex items-center space-x-2">
     <svg
       class="w-[40px] h-[40px] fill-[#4f46e5]"
       viewBox="0 0 448 512"
