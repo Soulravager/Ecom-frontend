@@ -58,7 +58,7 @@
 
 <script setup>
 import { ref } from "vue";
-import MainLogo from "./Main_logo.vue";
+import MainLogo from "./MainLogo.vue";
 
 const open = ref(false);
 </script>
