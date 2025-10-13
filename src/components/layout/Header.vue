@@ -26,7 +26,7 @@
           >Contact</a
         >
         <a
-          href="#"
+          href="/login"
           class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition"
         >
           Sign In
@@ -44,7 +44,7 @@
           <a href="/contact" class="block text-gray-700 py-2">Contact</a>
           <div class="pt-2 border-t mt-2">
             <a
-              href="#"
+              href="/login"
               class="block bg-indigo-600 text-white text-center py-2 rounded hover:bg-indigo-700 transition"
             >
               Sign In
@@ -58,7 +58,7 @@
 
 <script setup>
 import { ref } from "vue";
-import MainLogo from "./Main_logo.vue";
+import MainLogo from "./MainLogo.vue";
 
 const open = ref(false);
 </script>

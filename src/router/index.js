@@ -3,6 +3,7 @@ import Home from "../views/home.vue";
 import About from "../views/About.vue";
 import Contact from "../views/contact.vue";
 import Product from "../views/Product.vue";
+import Login from "../views/Login.vue";
 
 const routes = [
   {
@@ -17,6 +18,7 @@ const routes = [
   },
   { path: "/contact", name: "Contact", component: Contact },
   { path: "/product", name: "Product", component: Product },
+  { path: "/login", name: "Login", component: Login },
   {
     path: "/",
     redirect: "/",

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col min-h-screen w-screen bg-sky-400 text-gray-100 overflow-x-hidden"
+    class="flex flex-col min-h-screen w-screen bg-gray-100 text-gray-100 overflow-x-hidden"
   >
     <div><Header /></div>
 
