@@ -1,14 +1,14 @@
 <template>
   <footer class="relative bg-white text-gray-700 border-t border-gray-200 pt-6">
     <div
-      class="flex flex-col md:flex-row justify-between items-start px-4 md:px-10 lg:px-12 gap-8 md:gap-12 w-full max-w-[1280px] mx-auto"
+      class="flex flex-col md:flex-row justify-between items-start px-4 md:px-6 lg:px-0 gap-8 md:gap-12 w-full max-w-[1600px] mx-0"
     >
       <!-- Left -->
-      <div class="max-w-[1280px] flex-1">
-        <MainLogo class="mb-5" />
+      <div class="flex-1 lg:ml-[40px]">
+        <MainLogo class="mb-4" />
 
         <p class="text-sm text-gray-600 leading-6 mb-1">
-          Shoppee the E-commerce site .
+          Shoppee the E-commerce site.
         </p>
         <p class="text-sm text-gray-600 leading-6">
           Developed by Alvi - Your go-to platform for all things shopping!
@@ -17,22 +17,21 @@
         <!-- Social -->
         <div class="flex items-center gap-4 mt-5">
           <a href="#" aria-label="Facebook">
-            <img :src="fbIcon" alt="Facebook" class="w-4 h-4" />
+            <img :src="fbIcon" alt="Facebook" />
           </a>
           <a href="#" aria-label="X">
-            <img :src="xIcon" alt="Facebook" class="w-4 h-4" />
+            <img :src="xIcon" alt="X" />
           </a>
           <a href="#" aria-label="Instagram">
-            <img :src="instaIcon" alt="Facebook" class="w-4 h-4" />
+            <img :src="instaIcon" alt="Instagram" />
           </a>
         </div>
       </div>
 
       <!-- Links -->
       <div
-        class="flex flex-row sm:flex-row gap-20 md:gap-[100px] md:pt-[.5%] md:pr-[20%]"
+        class="flex flex-row sm:flex-row gap-20 md:gap-[80px] lg:gap-[100px] md:pt-[.5%] lg:pr-[80px] lg:mr-[80px]"
       >
-        <!-- Home Links -->
         <div>
           <h4 class="text-indigo-700 font-semibold text-base mb-4">Home</h4>
           <ul class="space-y-2">
