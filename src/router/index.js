@@ -6,7 +6,7 @@ import Product from "../views/Product.vue";
 
 const routes = [
   {
-    path: "/home",
+    path: "/",
     name: "Home",
     component: Home,
   },
@@ -19,7 +19,7 @@ const routes = [
   { path: "/product", name: "Product", component: Product },
   {
     path: "/",
-    redirect: "/home",
+    redirect: "/",
   },
 ];
 
