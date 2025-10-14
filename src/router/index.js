@@ -4,6 +4,7 @@ import About from "../views/About.vue";
 import Contact from "../views/contact.vue";
 import Product from "../views/Product.vue";
 import Login from "../views/Login.vue";
+import UserProfile from "../components/User/UserProfile.vue";
 
 const routes = [
   {
@@ -18,9 +19,21 @@ const routes = [
   },
   { path: "/contact", name: "Contact", component: Contact },
   { path: "/product", name: "Product", component: Product },
-  { path: "/login", name: "Login", component: Login },
   {
-    path: "/",
+    path: "/login",
+    name: "Login",
+    component: Login,
+    meta: { requiresGuest: true },
+  },
+  {
+    path: "/profile",
+    name: "Profile",
+    component: UserProfile,
+    meta: { requiresAuth: true },
+  },
+
+  {
+    path: "/:pathMatch(.*)*",
     redirect: "/",
   },
 ];
@@ -28,6 +41,18 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem("authToken");
+
+  if (to.meta.requiresAuth && !token) {
+    next("/login");
+  } else if (to.meta.requiresGuest && token) {
+    next("/");
+  } else {
+    next();
+  }
 });
 
 export default router;

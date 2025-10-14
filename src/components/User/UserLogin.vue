@@ -1,10 +1,11 @@
 <template>
-  <form class="space-y-4">
+  <form @submit.prevent="loginUser" class="space-y-4">
     <div>
       <label for="email" class="block text-sm font-medium text-gray-700"
         >Email</label
       >
       <input
+        v-model="email"
         type="email"
         id="email"
         placeholder="Enter your email"
@@ -17,6 +18,7 @@
         >Password</label
       >
       <input
+        v-model="password"
         type="password"
         id="password"
         placeholder="Enter your password"
@@ -30,9 +32,38 @@
     >
       Login
     </button>
+
+    <p v-if="error" class="text-red-500 text-sm mt-2 text-center">
+      {{ error }}
+    </p>
   </form>
 </template>
 
 <script setup>
-// Simple static form template for now — handle login logic later
+import { ref } from "vue";
+import api from "../../api/axios";
+
+const email = ref("");
+const password = ref("");
+const error = ref("");
+
+const loginUser = async () => {
+  error.value = "";
+  try {
+    const res = await api.post("/login", {
+      email: email.value,
+      password: password.value,
+    });
+    const token = res.data.access_token;
+
+    localStorage.setItem("authToken", token);
+
+    const userRes = await api.get("/user");
+    localStorage.setItem("user", JSON.stringify(userRes.data));
+
+    window.location.href = "/";
+  } catch (err) {
+    error.value = err.response?.data?.message || "Login failed";
+  }
+};
 </script>
