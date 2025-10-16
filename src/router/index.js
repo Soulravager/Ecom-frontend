@@ -6,6 +6,7 @@ import Product from "../views/Product.vue";
 import Login from "../views/Login.vue";
 import UserProfile from "../components/User/UserProfile.vue";
 import Admin from "../views/Admin.vue";
+import Analytics from "../components/Admin/Analytics.vue";
 
 const routes = [
   {
@@ -30,7 +31,7 @@ const routes = [
     path: "/admin",
     name: "Admin",
     component: Admin,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, requiresAdminOrStaff: true },
   },
 
   {
@@ -53,14 +54,28 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem("authToken");
+  const userData = localStorage.getItem("user");
+  const user = userData ? JSON.parse(userData) : null;
+  const roleSlug = user?.role?.slug;
 
   if (to.meta.requiresAuth && !token) {
-    next("/login");
-  } else if (to.meta.requiresGuest && token) {
-    next("/");
-  } else {
-    next();
+    return next("/login");
   }
+
+  if (to.meta.requiresGuest && token) {
+    return next("/");
+  }
+
+  if (to.meta.requiresAdminOrStaff) {
+    if (roleSlug === "admin" || roleSlug === "staff") {
+      return next();
+    } else {
+      alert("Access denied!.");
+      return next("/");
+    }
+  }
+
+  next();
 });
 
 export default router;
