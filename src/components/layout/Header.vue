@@ -85,7 +85,7 @@
               >
               <button
                 @click="logout"
-                class="block bg-red-600 text-white text-center py-2 rounded hover:bg-red-700 transition w-full"
+                class="block bg-indigo-600 text-white text-center py-2 rounded hover:bg-indigo-700 transition w-full"
               >
                 Logout
               </button>

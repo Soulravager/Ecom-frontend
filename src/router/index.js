@@ -5,6 +5,7 @@ import Contact from "../views/contact.vue";
 import Product from "../views/Product.vue";
 import Login from "../views/Login.vue";
 import UserProfile from "../components/User/UserProfile.vue";
+import Admin from "../views/Admin.vue";
 
 const routes = [
   {
@@ -25,6 +26,13 @@ const routes = [
     component: Login,
     meta: { requiresGuest: true },
   },
+  {
+    path: "/admin",
+    name: "Admin",
+    component: Admin,
+    meta: { requiresAuth: true },
+  },
+
   {
     path: "/profile",
     name: "Profile",
