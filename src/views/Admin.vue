@@ -19,7 +19,7 @@
           </button>
         </div>
 
-        <nav class="flex-1 pb-350 overflow-hidden">
+        <nav class="flex-1 pb-250 overflow-hidden">
           <ul>
             <li
               v-for="item in menuItems"
@@ -101,8 +101,8 @@ const menuItems = [
   { name: "Analytics", label: "Dashboard " },
   { name: "Products", label: "Products" },
   { name: "Orders", label: "Order Management" },
-  { name: "Users", label: "Users" },
   { name: "Staff", label: "Staff Management" },
+  { name: "Users", label: "Users" },
 ];
 
 const currentComponent = computed(() => {

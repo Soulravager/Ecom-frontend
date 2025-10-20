@@ -37,7 +37,7 @@
           <input
             v-model="filters.from_date"
             type="date"
-            class="border border-gray-900 rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-400 w-full sm:w-48"
+            class="border border-gray-900 text-black rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-400 w-full sm:w-48"
           />
         </div>
         <div class="flex flex-col w-full sm:w-auto">
@@ -45,7 +45,7 @@
           <input
             v-model="filters.to_date"
             type="date"
-            class="border border-gray-900 rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-400 w-full sm:w-48"
+            class="border border-gray-900 text-black rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-400 w-full sm:w-48"
           />
         </div>
         <button
@@ -68,18 +68,22 @@
       </h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <div class="p-4 border rounded-lg">
-          <p class="text-gray-500 text-sm">Product Name</p>
-          <p class="text-lg font-semibold break-words">
+          <p class="text-gray-800 text-sm">Product Name</p>
+          <p class="text-lg font-semibold break-words text-gray-600">
             {{ salesStats.product_name }}
           </p>
         </div>
         <div class="p-4 border rounded-lg">
-          <p class="text-gray-500 text-sm">Total Quantity Sold</p>
-          <p class="text-lg font-semibold">{{ salesStats.total_quantity }}</p>
+          <p class="text-gray-800 text-sm">Total Quantity Sold</p>
+          <p class="text-lg font-semibold text-gray-600">
+            {{ salesStats.total_quantity }}
+          </p>
         </div>
         <div class="p-4 border rounded-lg">
-          <p class="text-gray-500 text-sm">Purchase Count</p>
-          <p class="text-lg font-semibold">{{ salesStats.purchase_count }}</p>
+          <p class="text-gray-800 text-sm">Purchase Count</p>
+          <p class="text-lg font-semibold text-gray-600">
+            {{ salesStats.purchase_count }}
+          </p>
         </div>
       </div>
     </div>
