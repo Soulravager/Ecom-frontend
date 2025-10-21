@@ -17,7 +17,7 @@
       <!-- Desktop Nav -->
       <nav class="hidden md:flex items-center space-x-6 relative">
         <a href="/" class="text-gray-700 hover:text-indigo-600">Home</a>
-        <a href="/Product" class="text-gray-700 hover:text-indigo-600"
+        <a href="/product" class="text-gray-700 hover:text-indigo-600"
           >Products</a
         >
         <a href="/about" class="text-gray-700 hover:text-indigo-600">About</a>

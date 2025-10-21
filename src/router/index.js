@@ -11,16 +11,16 @@ import Analytics from "../components/Admin/Analytics.vue";
 const routes = [
   {
     path: "/",
-    name: "Home",
+    name: "home",
     component: Home,
   },
   {
     path: "/about",
-    name: "About",
+    name: "about",
     component: About,
   },
-  { path: "/contact", name: "Contact", component: Contact },
-  { path: "/product", name: "Product", component: Product },
+  { path: "/contact", name: "contact", component: Contact },
+  { path: "/product", name: "product", component: Product },
   {
     path: "/login",
     name: "Login",
@@ -36,7 +36,7 @@ const routes = [
 
   {
     path: "/profile",
-    name: "Profile",
+    name: "profile",
     component: UserProfile,
     meta: { requiresAuth: true },
   },
