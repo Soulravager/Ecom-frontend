@@ -4,23 +4,59 @@ import About from "../views/About.vue";
 import Contact from "../views/contact.vue";
 import Product from "../views/Product.vue";
 import Login from "../views/Login.vue";
+import UserProfile from "../components/User/UserProfile.vue";
+import Admin from "../views/Admin.vue";
+import Productshow from "../views/Productshow.vue";
+import Cart from "../views/Cart.vue";
+import Analytics from "../components/Admin/Analytics.vue";
 
 const routes = [
   {
     path: "/",
-    name: "Home",
+    name: "home",
     component: Home,
   },
   {
     path: "/about",
-    name: "About",
+    name: "about",
     component: About,
   },
-  { path: "/contact", name: "Contact", component: Contact },
-  { path: "/product", name: "Product", component: Product },
-  { path: "/login", name: "Login", component: Login },
+  { path: "/contact", name: "contact", component: Contact },
+  { path: "/product", name: "product", component: Product },
   {
-    path: "/",
+    path: "/login",
+    name: "Login",
+    component: Login,
+    meta: { requiresGuest: true },
+  },
+  {
+    path: "/cart",
+    name: "Cart",
+    component: Cart,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/item/:id",
+    name: "Productshow",
+    component: Productshow,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/admin",
+    name: "Admin",
+    component: Admin,
+    meta: { requiresAuth: true, requiresAdminOrStaff: true },
+  },
+
+  {
+    path: "/profile",
+    name: "profile",
+    component: UserProfile,
+    meta: { requiresAuth: true },
+  },
+
+  {
+    path: "/:pathMatch(.*)*",
     redirect: "/",
   },
 ];
@@ -28,6 +64,32 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem("authToken");
+  const userData = localStorage.getItem("user");
+  const user = userData ? JSON.parse(userData) : null;
+  const roleSlug = user?.role?.slug;
+
+  if (to.meta.requiresAuth && !token) {
+    return next("/login");
+  }
+
+  if (to.meta.requiresGuest && token) {
+    return next("/");
+  }
+
+  if (to.meta.requiresAdminOrStaff) {
+    if (roleSlug === "admin" || roleSlug === "staff") {
+      return next();
+    } else {
+      alert("Access denied!.");
+      return next("/");
+    }
+  }
+
+  next();
 });
 
 export default router;

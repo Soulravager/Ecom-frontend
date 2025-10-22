@@ -1,11 +1,10 @@
 <template>
   <header class="bg-white shadow w-full sticky top-0 left-0 z-50">
     <div class="flex justify-between items-center h-16 px-4 md:px-10">
-      <!-- LOGO place -->
-
+      <!-- LOGO -->
       <MainLogo />
 
-      <!--Button-->
+      <!--  mobilw btn  -->
       <button
         @click="open = !open"
         aria-label="Toggle menu"
@@ -16,16 +15,55 @@
       </button>
 
       <!-- Desktop Nav -->
-      <nav class="hidden md:flex items-center space-x-6">
+      <nav class="hidden md:flex items-center space-x-6 relative">
         <a href="/" class="text-gray-700 hover:text-indigo-600">Home</a>
-        <a href="/Product" class="text-gray-700 hover:text-indigo-600"
+        <a href="/product" class="text-gray-700 hover:text-indigo-600"
           >Products</a
         >
         <a href="/about" class="text-gray-700 hover:text-indigo-600">About</a>
         <a href="/contact" class="text-gray-700 hover:text-indigo-600"
           >Contact</a
         >
+        <div v-if="user">
+          <a href="/cart" class="text-gray-700 hover:text-indigo-600"
+            ><cartlogo
+          /></a>
+        </div>
+
+        <!-- user login part -->
+        <div v-if="user" class="relative">
+          <button
+            @click="toggleDropdown"
+            class="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium"
+          >
+            <span> {{ user.name }}</span>
+            <i class="fa fa-caret-down"></i>
+          </button>
+
+          <!-- Dropmenu -->
+          <transition name="fade">
+            <div
+              v-if="dropdownOpen"
+              class="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-md z-50"
+            >
+              <a
+                href="/profile"
+                class="block px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-b-lg"
+                >Profile</a
+              >
+              <button
+                @click="logout"
+                class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-t-lg"
+              >
+                Logout
+              </button>
+            </div>
+          </transition>
+        </div>
+
+        <!-- not logged -->
         <a
+          v-else
           href="/login"
           class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition"
         >
@@ -39,11 +77,36 @@
       <div v-show="open" class="md:hidden bg-white border-t w-full">
         <div class="px-6 py-4 space-y-2">
           <a href="/" class="block text-gray-700 py-2">Home</a>
-          <a href="/Product" class="block text-gray-700 py-2">Products</a>
+          <a href="/product" class="block text-gray-700 py-2">Products</a>
           <a href="/about" class="block text-gray-700 py-2">About</a>
           <a href="/contact" class="block text-gray-700 py-2">Contact</a>
+
           <div class="pt-2 border-t mt-2">
+            <!-- Login phone -->
+            <div v-if="user">
+              <div v-if="user">
+                <a
+                  href="/cart"
+                  class="block bg-gray-100 text-gray-700 text-center py-2 rounded mb-2 hover:bg-gray-200 transition"
+                  >Cart
+                </a>
+              </div>
+              <a
+                href="/profile"
+                class="block bg-gray-100 text-gray-700 text-center py-2 rounded mb-2 hover:bg-gray-200 transition"
+                >Profile</a
+              >
+              <button
+                @click="logout"
+                class="block bg-indigo-600 text-white text-center py-2 rounded hover:bg-indigo-700 transition w-full"
+              >
+                Logout
+              </button>
+            </div>
+
+            <!-- notlogged phone -->
             <a
+              v-else
               href="/login"
               class="block bg-indigo-600 text-white text-center py-2 rounded hover:bg-indigo-700 transition"
             >
@@ -57,10 +120,38 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import MainLogo from "./MainLogo.vue";
+import api from "../../api/axios"; //need to check the file path later !!!!!!!!!
+import cartlogo from "../../components/cart/CartLogo.vue";
 
 const open = ref(false);
+const dropdownOpen = ref(false);
+const user = ref(null);
+
+onMounted(() => {
+  const storedUser = localStorage.getItem("user");
+  if (storedUser) {
+    user.value = JSON.parse(storedUser);
+  }
+});
+
+const toggleDropdown = () => {
+  dropdownOpen.value = !dropdownOpen.value;
+};
+
+const logout = async () => {
+  try {
+    await api.post("/logout");
+  } catch (error) {
+    console.error("Logout failed:", error);
+  }
+  localStorage.removeItem("authToken");
+  localStorage.removeItem("user");
+  user.value = null;
+  dropdownOpen.value = false;
+  window.location.href = "/login";
+};
 </script>
 
 <style scoped>
