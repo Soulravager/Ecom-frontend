@@ -83,6 +83,7 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import axios from "axios";
+import api from "../../api/axios";
 
 const products = ref([]);
 const currentIndex = ref(0);
@@ -108,7 +109,7 @@ const prevSlide = () => {
 
 const fetchHotProducts = async () => {
   try {
-    const response = await axios.get("http://127.0.0.1:8000/api/new");
+    const response = await api.get("/new");
     products.value = response.data.hot_products.map((item) => ({
       id: item.product_id,
       name: item.product_name,
