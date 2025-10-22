@@ -50,15 +50,12 @@
                 />
               </div>
               <div class="p-4 text-left">
-                <center>
-                  <h3 class="font-semibold text-gray-700 text-sm md:text-base">
-                    {{ product.name }}
-                  </h3>
-                </center>
-                <!-- <p class="text-red-500 text-xs md:text-sm">
-                  ₹
-                  {{ product.category || "—" }}
-                </p> -->
+                <h3 class="font-semibold text-gray-700 text-sm md:text-base">
+                  {{ product.name }}
+                </h3>
+                <p class="text-gray-500 text-xs md:text-sm">
+                  {{ product.category }}
+                </p>
               </div>
             </div>
           </div>
@@ -82,11 +79,23 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
-import axios from "axios";
 
-const products = ref([]);
+const products = ref([
+  {
+    name: "Product name HERE",
+    category: "product info here",
+    image: new URL("../../assets/product/Cpu/amd5.jpg", import.meta.url).href,
+  },
+  {
+    name: "Product name HERE",
+    category: "product info here",
+    image: new URL("../../assets/product/Cpu/amd9.jpg", import.meta.url).href,
+  },
+]);
+
 const currentIndex = ref(0);
 const autoSlide = ref(null);
+
 const visibleCards = ref(window.innerWidth < 768 ? 1 : 5);
 
 const handleResize = () => {
@@ -101,27 +110,13 @@ const visibleProducts = computed(() => {
 const nextSlide = () => {
   currentIndex.value = (currentIndex.value + 1) % products.value.length;
 };
+
 const prevSlide = () => {
   currentIndex.value =
     (currentIndex.value - 1 + products.value.length) % products.value.length;
 };
 
-const fetchHotProducts = async () => {
-  try {
-    const response = await axios.get("http://127.0.0.1:8000/api/new");
-    products.value = response.data.hot_products.map((item) => ({
-      id: item.product_id,
-      name: item.product_name,
-      image: item.image ? `${item.image}` : "https://via.placeholder.com/150",
-      category: item.price || "Category not available",
-    }));
-  } catch (error) {
-    console.error("Failed to load hot products:", error);
-  }
-};
-
 onMounted(() => {
-  fetchHotProducts();
   autoSlide.value = setInterval(nextSlide, 30000);
 });
 onBeforeUnmount(() => clearInterval(autoSlide.value));

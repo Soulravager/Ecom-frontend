@@ -6,6 +6,8 @@ import Product from "../views/Product.vue";
 import Login from "../views/Login.vue";
 import UserProfile from "../components/User/UserProfile.vue";
 import Admin from "../views/Admin.vue";
+import Productshow from "../views/Productshow.vue";
+import Cart from "../views/Cart.vue";
 import Analytics from "../components/Admin/Analytics.vue";
 
 const routes = [
@@ -26,6 +28,18 @@ const routes = [
     name: "Login",
     component: Login,
     meta: { requiresGuest: true },
+  },
+  {
+    path: "/cart",
+    name: "Cart",
+    component: Cart,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/item/:id",
+    name: "Productshow",
+    component: Productshow,
+    meta: { requiresAuth: true },
   },
   {
     path: "/admin",

@@ -3,6 +3,7 @@
     <Opensection />
     <InfoSection />
     <MainProducts />
+    <!-- <MainProductsDemo /> -->
     <ReviewSection />
   </main>
 </template>
@@ -11,5 +12,6 @@
 import Opensection from "../components/home/Opensection.vue";
 import InfoSection from "../components/home/InfoSection.vue";
 import MainProducts from "../components/home/MainProducts.vue";
+import MainProductsDemo from "../components/home/MainProductsDemo.vue";
 import ReviewSection from "../components/home/ReviewSection.vue";
 </script>

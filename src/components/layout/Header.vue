@@ -24,6 +24,11 @@
         <a href="/contact" class="text-gray-700 hover:text-indigo-600"
           >Contact</a
         >
+        <div v-if="user">
+          <a href="/cart" class="text-gray-700 hover:text-indigo-600"
+            ><cartlogo
+          /></a>
+        </div>
 
         <!-- user login part -->
         <div v-if="user" class="relative">
@@ -72,12 +77,20 @@
       <div v-show="open" class="md:hidden bg-white border-t w-full">
         <div class="px-6 py-4 space-y-2">
           <a href="/" class="block text-gray-700 py-2">Home</a>
-          <a href="/Product" class="block text-gray-700 py-2">Products</a>
+          <a href="/product" class="block text-gray-700 py-2">Products</a>
           <a href="/about" class="block text-gray-700 py-2">About</a>
           <a href="/contact" class="block text-gray-700 py-2">Contact</a>
+
           <div class="pt-2 border-t mt-2">
             <!-- Login phone -->
             <div v-if="user">
+              <div v-if="user">
+                <a
+                  href="/cart"
+                  class="block bg-gray-100 text-gray-700 text-center py-2 rounded mb-2 hover:bg-gray-200 transition"
+                  >Cart
+                </a>
+              </div>
               <a
                 href="/profile"
                 class="block bg-gray-100 text-gray-700 text-center py-2 rounded mb-2 hover:bg-gray-200 transition"
@@ -110,6 +123,7 @@
 import { ref, onMounted } from "vue";
 import MainLogo from "./MainLogo.vue";
 import api from "../../api/axios"; //need to check the file path later !!!!!!!!!
+import cartlogo from "../../components/cart/CartLogo.vue";
 
 const open = ref(false);
 const dropdownOpen = ref(false);
