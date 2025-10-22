@@ -66,8 +66,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import api from "../api/axios";
-import backbtn from "../assets/component/backbtn.vue";
+import api from "../../api/axios";
+import backbtn from "../../assets/component/backbtn.vue";
 
 const route = useRoute();
 const product = ref(null);
@@ -97,7 +97,12 @@ const addToCart = async () => {
 };
 
 onMounted(() => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  const app = document.getElementById("app");
+  if (app && app.scrollTo) {
+    app.scrollTo({ top: 0, behavior: "smooth" });
+  } else {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
   fetchProduct();
 });
 </script>

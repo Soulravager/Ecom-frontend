@@ -6,7 +6,8 @@ import Product from "../views/Product.vue";
 import Login from "../views/Login.vue";
 import UserProfile from "../components/User/UserProfile.vue";
 import Admin from "../views/Admin.vue";
-import Productshow from "../views/Productshow.vue";
+import Productshow from "../components/product/Productshow.vue";
+import Payment from "../views/Payment.vue";
 import Cart from "../views/Cart.vue";
 import Analytics from "../components/Admin/Analytics.vue";
 
@@ -46,6 +47,12 @@ const routes = [
     name: "Admin",
     component: Admin,
     meta: { requiresAuth: true, requiresAdminOrStaff: true },
+  },
+  {
+    path: "/payment",
+    name: "Payment",
+    component: Payment,
+    meta: { requiresAuth: true },
   },
 
   {

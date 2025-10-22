@@ -97,13 +97,13 @@
     </div>
 
     <!--  Top Button -->
-    <a
-      href="#"
+    <button
+      @click="scrollToTop"
       class="absolute bottom-[10%] md:bottom-[30%] right-8 md:right-20 bg-indigo-600 text-white w-[45px] h-[45px] rounded-full flex justify-center items-center text-lg hover:bg-indigo-700 transition"
       aria-label="Back to top"
     >
       <i class="fas fa-chevron-up"></i>
-    </a>
+    </button>
   </footer>
 </template>
 
@@ -112,4 +112,14 @@ import MainLogo from "./MainLogo.vue";
 import fbIcon from "../../assets/SocialMedia/fb.png";
 import xIcon from "../../assets/SocialMedia/x.png";
 import instaIcon from "../../assets/SocialMedia/insta.png";
+
+const scrollToTop = () => {
+  const appContainer = document.getElementById("app");
+
+  if (appContainer && appContainer.scrollTo) {
+    appContainer.scrollTo({ top: 0, behavior: "smooth" });
+  } else {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+};
 </script>
