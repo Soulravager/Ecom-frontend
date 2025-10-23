@@ -93,6 +93,16 @@ const totalAmount = ref(0);
 const paymentType = ref("razorpay");
 const isProcessing = ref(false);
 const user = ref(null);
+const userData = ref(null);
+
+const fetchUserData = async () => {
+  try {
+    const { data } = await api.get("/user-data");
+    userData.value = data.data;
+  } catch (err) {
+    console.error("Error fetching user data:", err);
+  }
+};
 
 const fetchCart = async () => {
   const token = localStorage.getItem("authToken");
@@ -126,6 +136,10 @@ const placeOrder = async () => {
     return;
   }
 
+  if (!userData.value) {
+    await fetchUserData();
+  }
+
   try {
     isProcessing.value = true;
 
@@ -141,7 +155,6 @@ const placeOrder = async () => {
       openRazorpay(order, token);
     } else {
       alert("Order placed with Cash on Delivery!");
-
       window.location.href = "/profile";
     }
   } catch (error) {
@@ -153,6 +166,8 @@ const placeOrder = async () => {
 };
 
 const openRazorpay = (order, token) => {
+  const phone = userData.value?.phone_number || "";
+
   const options = {
     key: import.meta.env.VITE_RAZORPAY_KEY,
     amount: order.total_amount * 100,
@@ -172,7 +187,6 @@ const openRazorpay = (order, token) => {
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
-        // alert("✅ Payment Successful! Order confirmed.");
         window.location.href = "/profile";
       } catch (err) {
         console.error("Payment verification failed:", err);
@@ -182,7 +196,7 @@ const openRazorpay = (order, token) => {
     prefill: {
       name: user.value?.name || "Guest",
       email: user.value?.email || "guest@example.com",
-      contact: user.value?.mobile || "0000000000",
+      contact: phone.length === 10 ? phone : "",
     },
     theme: { color: "#6366F1" },
   };
@@ -190,11 +204,15 @@ const openRazorpay = (order, token) => {
   const rzp = new Razorpay(options);
   rzp.open();
 };
+
 onMounted(() => {
   window.scrollTo({ top: 0, behavior: "smooth" });
-  fetchCart();
+
   const storedUser = localStorage.getItem("user");
   if (storedUser) user.value = JSON.parse(storedUser);
+
+  fetchCart();
+  fetchUserData();
 
   if (!document.querySelector("#razorpay-script")) {
     const script = document.createElement("script");

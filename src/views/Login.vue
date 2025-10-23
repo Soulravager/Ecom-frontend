@@ -5,14 +5,14 @@
     <div
       class="flex flex-col md:flex-row gap-6 md:gap-10 items-stretch justify-center w-full px-4 sm:px-6"
     >
-      <!-- <WelcomeCard
+      <WelcomeCard
         :title="isLogin ? 'Welcome Back!' : 'Join Us Today!'"
         :message="
           isLogin
             ? 'Sign in to continue Shopping.'
             : 'Create your account to start your Shopping.'
         "
-      /> -->
+      />
 
       <!-- Right Card -->
       <section

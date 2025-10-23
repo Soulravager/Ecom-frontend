@@ -74,9 +74,7 @@
   </section>
 </template>
 
-<script setup>
-// no script needed for static content
-</script>
+<script setup></script>
 
 <style scoped>
 section {

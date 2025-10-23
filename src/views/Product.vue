@@ -111,7 +111,7 @@ const fetchProducts = async () => {
 };
 
 const viewProduct = (product) => {
-  router.push({ name: "Productshow", params: { id: product.id } });
+  router.push({ name: "ProductShow", params: { id: product.id } });
 };
 
 const addToCart = async (product) => {

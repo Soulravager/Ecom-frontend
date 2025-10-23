@@ -4,7 +4,7 @@
       <!-- LOGO -->
       <MainLogo />
 
-      <!--  mobilw btn  -->
+      <!--  mobile btn  -->
       <button
         @click="open = !open"
         aria-label="Toggle menu"
@@ -40,7 +40,7 @@
             <i class="fa fa-caret-down"></i>
           </button>
 
-          <!-- Dropmenu -->
+          <!-- DropMenu -->
           <transition name="fade">
             <div
               v-if="dropdownOpen"
@@ -104,7 +104,7 @@
               </button>
             </div>
 
-            <!-- notlogged phone -->
+            <!-- not logged phone -->
             <a
               v-else
               href="/login"
@@ -122,7 +122,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import MainLogo from "./MainLogo.vue";
-import api from "../../api/axios"; //need to check the file path later !!!!!!!!!
+import api from "../../api/axios";
 import cartlogo from "../../components/cart/CartLogo.vue";
 
 const open = ref(false);

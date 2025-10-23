@@ -1,16 +1,14 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../views/home.vue";
+import Home from "../views/Home.vue";
 import About from "../views/About.vue";
-import Contact from "../views/contact.vue";
+import Contact from "../views/Contact.vue";
 import Product from "../views/Product.vue";
 import Login from "../views/Login.vue";
 import UserAccount from "../views/UserAccount.vue";
-import UserProfile from "../components/User/UserOrders.vue";
 import Admin from "../views/Admin.vue";
-import Productshow from "../components/product/Productshow.vue";
+import ProductShow from "../components/product/ProductShow.vue";
 import Payment from "../views/Payment.vue";
 import Cart from "../views/Cart.vue";
-import Analytics from "../components/Admin/Analytics.vue";
 
 const routes = [
   {
@@ -39,8 +37,8 @@ const routes = [
   },
   {
     path: "/item/:id",
-    name: "Productshow",
-    component: Productshow,
+    name: "ProductShow",
+    component: ProductShow,
     meta: { requiresAuth: true },
   },
   {
