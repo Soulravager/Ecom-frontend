@@ -151,7 +151,6 @@ const placeOrder = async () => {
   }
 };
 
-// ✅ REAL Razorpay flow
 const openRazorpay = (order, token) => {
   const options = {
     key: import.meta.env.VITE_RAZORPAY_KEY,
@@ -159,7 +158,7 @@ const openRazorpay = (order, token) => {
     currency: "INR",
     name: "Shopee",
     description: "Payment for your order",
-    order_id: order.payment_id, // Razorpay Order ID from backend
+    order_id: order.payment_id,
     handler: async function (response) {
       try {
         await api.post(
