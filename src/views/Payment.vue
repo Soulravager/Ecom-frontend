@@ -141,6 +141,7 @@ const placeOrder = async () => {
       openRazorpay(order, token);
     } else {
       alert("Order placed with Cash on Delivery!");
+
       window.location.href = "/profile";
     }
   } catch (error) {
@@ -171,7 +172,7 @@ const openRazorpay = (order, token) => {
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
-        alert("✅ Payment Successful! Order confirmed.");
+        // alert("✅ Payment Successful! Order confirmed.");
         window.location.href = "/profile";
       } catch (err) {
         console.error("Payment verification failed:", err);

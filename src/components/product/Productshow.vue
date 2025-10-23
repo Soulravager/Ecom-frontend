@@ -60,6 +60,25 @@
         </button>
       </div>
     </div>
+    <div
+      v-if="showModal"
+      class="fixed inset-0 bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50"
+    >
+      <div
+        class="bg-white rounded-2xl shadow-xl p-6 w-80 text-center transform transition-all"
+      >
+        <h2 class="text-xl font-semibold text-gray-800 mb-2">
+          {{ modalTitle }}
+        </h2>
+        <p class="text-gray-600 mb-6">{{ modalMessage }}</p>
+        <button
+          @click="closeModal"
+          class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition"
+        >
+          OK
+        </button>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -73,6 +92,48 @@ const route = useRoute();
 const product = ref(null);
 const loading = ref(true);
 
+const showModal = ref(false);
+const modalTitle = ref("");
+const modalMessage = ref("");
+
+const openModal = (title, message) => {
+  modalTitle.value = title;
+  modalMessage.value = message;
+  showModal.value = true;
+};
+
+const closeModal = () => {
+  showModal.value = false;
+};
+
+const addToCart = async () => {
+  const token = localStorage.getItem("authToken");
+
+  if (!token) {
+    openModal("Login Required", "Please log in to add items to your cart.");
+    return;
+  }
+
+  try {
+    await api.post("/cart", {
+      product_id: product.value.id,
+      quantity: 1,
+    });
+    openModal(
+      "Added to Cart",
+      `${product.value.name} has been added to your cart!`
+    );
+  } catch (err) {
+    console.error("Error adding to cart:", err);
+    if (err.response?.status === 401) {
+      openModal("Session Expired", "Please log in again.");
+      localStorage.removeItem("authToken");
+    } else {
+      openModal("Error", "Failed to add to cart. Try again later.");
+    }
+  }
+};
+
 const fetchProduct = async () => {
   try {
     const res = await api.get(`/products/${route.params.id}`);
@@ -81,18 +142,6 @@ const fetchProduct = async () => {
     console.error("Error fetching product:", err);
   } finally {
     loading.value = false;
-  }
-};
-
-const addToCart = async () => {
-  try {
-    await api.post("/cart", {
-      product_id: product.value.id,
-      quantity: 1,
-    });
-    alert(`Added "${product.value.name}" to your cart!`);
-  } catch (err) {
-    console.error("Error adding to cart:", err);
   }
 };
 

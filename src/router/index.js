@@ -4,7 +4,8 @@ import About from "../views/About.vue";
 import Contact from "../views/contact.vue";
 import Product from "../views/Product.vue";
 import Login from "../views/Login.vue";
-import UserProfile from "../components/User/UserProfile.vue";
+import UserAccount from "../views/UserAccount.vue";
+import UserProfile from "../components/User/UserOrders.vue";
 import Admin from "../views/Admin.vue";
 import Productshow from "../components/product/Productshow.vue";
 import Payment from "../views/Payment.vue";
@@ -58,7 +59,7 @@ const routes = [
   {
     path: "/profile",
     name: "profile",
-    component: UserProfile,
+    component: UserAccount,
     meta: { requiresAuth: true },
   },
 

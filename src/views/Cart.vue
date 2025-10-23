@@ -2,7 +2,31 @@
   <section class="bg-gray-50 min-h-screen p-6 md:p-10">
     <h1 class="text-3xl font-bold text-center text-indigo-700 mb-8">My Cart</h1>
 
-    <div class="max-w-6xl mx-auto flex flex-col md:flex-row gap-10">
+    <div v-if="loading" class="text-center text-gray-500 py-20">
+      Loading your cart...
+    </div>
+
+    <div
+      v-else-if="cartItems.length === 0"
+      class="flex flex-col items-center justify-center text-center py-20"
+    >
+      <img
+        src="../assets/common/mtcart.png"
+        alt="Empty cart"
+        class="w-32 h-32 mb-4 opacity-80"
+      />
+      <h2 class="text-xl md:text-2xl font-semibold text-gray-700 mb-2">
+        Your Cart is empty :(
+      </h2>
+
+      <a
+        href="/product"
+        class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-xl transition"
+      >
+        Browse Products
+      </a>
+    </div>
+    <div v-else class="max-w-6xl mx-auto flex flex-col md:flex-row gap-10">
       <div class="flex-1 flex flex-col gap-6">
         <div
           v-for="item in cartItems"
@@ -88,7 +112,6 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import axios from "axios";
 import api from "../api/axios";
 import PlusIcon from "../assets/component/plus.vue";
 import MinusIcon from "../assets/component/minus.vue";
