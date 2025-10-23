@@ -41,6 +41,7 @@
           <option value="pending">Pending</option>
           <option value="completed">Completed</option>
           <option value="cancelled">Cancelled</option>
+          <option value="refunded">Refunded</option>
         </select>
       </div>
       <div v-if="loading" class="text-center text-gray-500 py-10">

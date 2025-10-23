@@ -84,7 +84,7 @@
           />
         </div>
 
-        <div class="flex flex-wrap gap-3 justify-end mt-6">
+        <div class="flex flex-wrap gap-3 md:justify-end justify-center mt-6">
           <button
             type="button"
             v-if="!isEditing"
