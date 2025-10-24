@@ -100,7 +100,7 @@ import UserProfile from "../components/User/UserData.vue";
 const user = ref(null);
 const activeTab = ref("orders");
 const sidebarOpen = ref(false);
-const isDesktop = ref(window.innerWidth >= 780);
+const isDesktop = ref(window.innerWidth >= 767);
 
 const toggleSidebar = () => (sidebarOpen.value = !sidebarOpen.value);
 
@@ -110,7 +110,7 @@ const selectTab = (tab) => {
 };
 
 const handleResize = () => {
-  isDesktop.value = window.innerWidth >= 780;
+  isDesktop.value = window.innerWidth >= 767;
   if (isDesktop.value) sidebarOpen.value = false;
 };
 
@@ -139,7 +139,7 @@ onUnmounted(() => {
   opacity: 0;
 }
 
-@media (max-width: 780px) {
+@media (max-width: 767px) {
   section {
     flex-direction: column;
     align-items: stretch;

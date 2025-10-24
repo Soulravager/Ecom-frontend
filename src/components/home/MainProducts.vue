@@ -40,15 +40,18 @@
             <div
               class="bg-white rounded-xl shadow-md hover:shadow-lg transition overflow-hidden"
             >
-              <div
-                class="bg-[#ffffff] rounded-xl p-5 flex items-center justify-center"
-              >
-                <img
-                  :src="product.image"
-                  :alt="product.name"
-                  class="w-full h-40 object-contain"
-                />
-              </div>
+              <router-link :to="`/item/${product.id}`">
+                <div
+                  class="bg-[#ffffff] rounded-xl p-5 flex items-center justify-center"
+                >
+                  <img
+                    :src="product.image"
+                    :alt="product.name"
+                    class="w-full h-40 object-contain"
+                  />
+                </div>
+              </router-link>
+
               <div class="p-4 text-left">
                 <center>
                   <h3 class="font-semibold text-gray-700 text-sm md:text-base">

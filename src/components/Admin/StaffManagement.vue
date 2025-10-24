@@ -18,11 +18,7 @@
         <span class="font-bold text-red-600">Admin users only</span>.
       </p>
     </div>
-
-    <div
-      v-else
-      class="bg-white shadow-md rounded-xl p-4 md:p-6 overflow-x-auto"
-    >
+    <div v-else>
       <div
         class="flex flex-col md:flex-row justify-between items-center mb-6 gap-3"
       >
@@ -60,61 +56,62 @@
           Refresh
         </button>
       </div>
+      <div class="bg-white shadow-md rounded-xl p-4 md:p-6 overflow-x-auto">
+        <table class="min-w-full border border-gray-200 text-sm">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="p-2 text-left border">ID</th>
+              <th class="p-2 text-left border">Name</th>
+              <th class="p-2 text-left border">Email</th>
+              <th class="p-2 text-left border">Role</th>
+              <th class="p-2 text-center border">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="user in filteredUsers"
+              :key="user.id"
+              class="hover:bg-gray-50 text-gray-700"
+            >
+              <td class="p-2 border break-words">{{ user.id }}</td>
+              <td class="p-2 border">{{ user.name }}</td>
+              <td class="p-2 border">{{ user.email }}</td>
+              <td class="p-2 border text-center">
+                <span
+                  :class="[
+                    'px-2 py-1 rounded-full text-xs font-medium',
+                    user.role_slug === 'staff'
+                      ? 'bg-indigo-100 text-indigo-700'
+                      : 'bg-green-100 text-green-700',
+                  ]"
+                >
+                  {{ user.role_name }}
+                </span>
+              </td>
+              <td class="p-2 border text-center space-x-2">
+                <button
+                  @click="toggleRole(user)"
+                  class="px-3 py-1 rounded-lg bg-yellow-500 text-white text-xs hover:bg-yellow-600 transition"
+                >
+                  {{ user.role_slug === "staff" ? "Make User" : "Make Staff" }}
+                </button>
+                <button
+                  @click="deleteUser(user.id)"
+                  class="px-3 py-1 rounded-lg bg-red-600 text-white text-xs hover:bg-red-700 transition"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-      <table class="min-w-full border border-gray-200 text-sm">
-        <thead class="bg-gray-100">
-          <tr>
-            <th class="p-2 text-left border">ID</th>
-            <th class="p-2 text-left border">Name</th>
-            <th class="p-2 text-left border">Email</th>
-            <th class="p-2 text-left border">Role</th>
-            <th class="p-2 text-center border">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="user in filteredUsers"
-            :key="user.id"
-            class="hover:bg-gray-50 text-gray-700"
-          >
-            <td class="p-2 border break-words">{{ user.id }}</td>
-            <td class="p-2 border">{{ user.name }}</td>
-            <td class="p-2 border">{{ user.email }}</td>
-            <td class="p-2 border text-center">
-              <span
-                :class="[
-                  'px-2 py-1 rounded-full text-xs font-medium',
-                  user.role_slug === 'staff'
-                    ? 'bg-indigo-100 text-indigo-700'
-                    : 'bg-green-100 text-green-700',
-                ]"
-              >
-                {{ user.role_name }}
-              </span>
-            </td>
-            <td class="p-2 border text-center space-x-2">
-              <button
-                @click="toggleRole(user)"
-                class="px-3 py-1 rounded-lg bg-yellow-500 text-white text-xs hover:bg-yellow-600 transition"
-              >
-                {{ user.role_slug === "staff" ? "Make User" : "Make Staff" }}
-              </button>
-              <button
-                @click="deleteUser(user.id)"
-                class="px-3 py-1 rounded-lg bg-red-600 text-white text-xs hover:bg-red-700 transition"
-              >
-                Delete
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <div
-        v-if="filteredUsers.length === 0 && isAdmin"
-        class="text-center py-6 text-gray-500 text-sm"
-      >
-        No matching users found.
+        <div
+          v-if="filteredUsers.length === 0 && isAdmin"
+          class="text-center py-6 text-gray-500 text-sm"
+        >
+          No matching users found.
+        </div>
       </div>
     </div>
   </section>

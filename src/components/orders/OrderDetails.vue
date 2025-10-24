@@ -37,7 +37,7 @@
           v-if="isCancelled"
           class="text-xs sm:text-sm text-gray-500 font-medium mt-1"
         >
-          Delivery Status:
+          Order Status:
           <span class="text-red-500">
             {{
               order.delivery_status === "cancelled_by_user"
@@ -51,7 +51,7 @@
           v-else-if="isDelivered"
           class="text-xs sm:text-sm text-gray-600 font-medium mt-1"
         >
-          Delivery Status:
+          Order Status:
           <span class="text-green-600">
             {{
               order.delivery_status === "delivered" ? "delivered" : "delivered"
@@ -214,7 +214,7 @@ const formatDate = (dateString) => {
   });
 };
 
-const steps = ["Pending", "Shipped", "On The Way", "Delivered"];
+const steps = ["Ordered", "Shipped", "On The Way", "Delivered"];
 const statusIndex = { pending: 0, shipped: 1, on_the_way: 2, delivered: 3 };
 const currentStep = ref(statusIndex[props.order.delivery_status] ?? 0);
 

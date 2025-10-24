@@ -3,25 +3,65 @@
     <h1 class="text-2xl md:text-3xl font-bold text-indigo-700 mb-6 text-center">
       Order Management
     </h1>
-
-    <div class="bg-white shadow-md rounded-xl p-4 md:p-6 overflow-x-auto">
-      <div
-        class="flex flex-col md:flex-row justify-between items-center mb-6 gap-3"
-      >
+    <div
+      class="flex flex-col md:flex-row justify-between items-center mb-6 gap-3"
+    >
+      <div class="flex flex-col md:flex-row gap-3 w-full md:w-auto">
+        <!-- filters -->
         <input
           v-model="searchQuery"
           type="text"
           placeholder="Search by Order ID or User ID..."
-          class="w-full md:w-1/2 border border-gray-300 text-black rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-indigo-400"
+          class="w-full md:w-64 border border-gray-300 text-black rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-indigo-400"
         />
+        <select
+          v-model="statusFilter"
+          class="w-full md:w-40 border border-gray-300 text-black rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-400"
+        >
+          <option value="">All Payment</option>
+          <option value="pending">Pending</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+          <option value="refunded">Refunded</option>
+        </select>
+        <select
+          v-model="deliveryFilter"
+          class="w-full md:w-44 border border-gray-300 text-black rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-400"
+        >
+          <option value="">All Delivery</option>
+          <option value="pending">Ordered</option>
+          <option value="shipped">Shipped</option>
+          <option value="on_the_way">On The Way</option>
+          <option value="delivered">Delivered</option>
+          <option value="cancelled_by_seller">Cancelled</option>
+        </select>
+
+        <select
+          v-model="orderView"
+          class="w-full md:w-48 border border-gray-300 text-black rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-400"
+        >
+          <option value="current">Active Orders</option>
+          <option value="all">All Orders</option>
+          <option value="cancelled">Cancelled Orders</option>
+          <option value="delivered">Delivered Orders</option>
+        </select>
       </div>
 
-      <!-- Orders Table -->
+      <button
+        @click="refreshOrders"
+        class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700 transition w-full md:w-auto"
+      >
+        Refresh
+      </button>
+    </div>
+
+    <div class="bg-white shadow-md rounded-xl p-4 md:p-6 overflow-x-auto">
       <table class="min-w-full border border-gray-200 text-sm">
         <thead class="bg-gray-100">
           <tr>
             <th class="p-2 text-left border">Order ID</th>
             <th class="p-2 text-left border">User ID</th>
+            <th class="p-2 text-left border">Payment Method</th>
             <th class="p-2 text-left border">Total Amount</th>
             <th class="p-2 text-left border">Payment Status</th>
             <th class="p-2 text-left border">Delivery Status</th>
@@ -34,12 +74,20 @@
             :key="order.id"
             class="hover:bg-gray-50 text-gray-700"
           >
-            <td class="p-2 border font-medium">{{ order.id }}</td>
-            <td class="p-2 border">{{ order.user_id }}</td>
+            <td class="p-2 border font-medium">{{ order.id.slice(-10) }}</td>
+            <td class="p-2 border">{{ order.user_id.slice(-10) }}</td>
+            <td class="p-2 border">
+              {{
+                order.payment_type
+                  .replaceAll("cod", "Cash On Delivery")
+                  .replaceAll("razorpay", "Razorpay GateWay")
+              }}
+            </td>
             <td class="p-2 border">₹ {{ order.total_amount }}</td>
             <td class="p-2 border capitalize">{{ order.status }}</td>
-            <td class="p-2 border capitalize">{{ order.delivery_status }}</td>
-
+            <td class="p-2 border capitalize">
+              {{ order.delivery_status.replaceAll("_", " ") }}
+            </td>
             <td class="p-2 border text-center space-x-2">
               <button
                 @click="openEditModal(order)"
@@ -60,7 +108,6 @@
       </div>
     </div>
 
-    <!-- Modal Popup for Update -->
     <div
       v-if="showModal"
       class="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center z-50"
@@ -85,7 +132,6 @@
             <select
               v-model="form.status"
               class="w-full border rounded-lg p-2 text-gray-950 focus:ring-2 focus:ring-indigo-400"
-              required
             >
               <option value="">Select Status</option>
               <option value="pending">Pending</option>
@@ -102,14 +148,22 @@
             <select
               v-model="form.delivery_status"
               class="w-full border rounded-lg p-2 text-gray-950 focus:ring-2 focus:ring-indigo-400"
-              required
+              :disabled="form.delivery_status === 'cancelled_by_user'"
             >
-              <option value="">Select Delivery Status</option>
-              <option value="pending">Pending</option>
-              <option value="shipped">Shipped</option>
-              <option value="on_the_way">On The Way</option>
-              <option value="delivered">Delivered</option>
-              <option value="cancelled_by_seller">Cancelled</option>
+              <option
+                v-if="form.delivery_status === 'cancelled_by_user'"
+                value="cancelled_by_user"
+              >
+                Cancelled by User
+              </option>
+              <template v-else>
+                <option value="">Select Delivery Status</option>
+                <option value="pending">Pending</option>
+                <option value="shipped">Shipped</option>
+                <option value="on_the_way">On The Way</option>
+                <option value="delivered">Delivered</option>
+                <option value="cancelled_by_seller">Cancelled</option>
+              </template>
             </select>
           </div>
 
@@ -133,6 +187,9 @@ const orders = ref([]);
 const showModal = ref(false);
 const editId = ref(null);
 const searchQuery = ref("");
+const statusFilter = ref("");
+const deliveryFilter = ref("");
+const orderView = ref("current");
 const form = ref({
   status: "",
   delivery_status: "",
@@ -145,6 +202,10 @@ const fetchOrders = async () => {
   } catch (err) {
     console.error("Error fetching orders:", err);
   }
+};
+
+const refreshOrders = async () => {
+  await fetchOrders();
 };
 
 const openEditModal = (order) => {
@@ -168,7 +229,10 @@ const updateOrderStatus = async () => {
       });
     }
 
-    if (form.value.delivery_status) {
+    if (
+      form.value.delivery_status &&
+      form.value.delivery_status !== "cancelled_by_user"
+    ) {
       await api.patch(`/orders/${editId.value}/delivery-status`, {
         delivery_status: form.value.delivery_status,
       });
@@ -183,11 +247,29 @@ const updateOrderStatus = async () => {
 
 const filteredOrders = computed(() => {
   const q = searchQuery.value.toLowerCase();
-  return orders.value.filter(
-    (o) =>
-      o.id.toLowerCase().includes(q) ||
-      String(o.user_id).toLowerCase().includes(q)
-  );
+  return orders.value.filter((o) => {
+    const idMatch =
+      String(o.id).toLowerCase().includes(q) ||
+      String(o.user_id).toLowerCase().includes(q);
+    const statusMatch = !statusFilter.value || o.status === statusFilter.value;
+    const deliveryMatch =
+      !deliveryFilter.value || o.delivery_status === deliveryFilter.value;
+
+    const isDelivered =
+      o.delivery_status === "delivered" && o.status === "completed";
+    const isCancelled =
+      ["cancelled_by_user", "cancelled_by_seller"].includes(
+        o.delivery_status
+      ) && ["cancelled", "refunded"].includes(o.status);
+
+    let viewMatch = true;
+    if (orderView.value === "delivered") viewMatch = isDelivered;
+    else if (orderView.value === "cancelled") viewMatch = isCancelled;
+    else if (orderView.value === "current")
+      viewMatch = !isDelivered && !isCancelled;
+
+    return idMatch && statusMatch && deliveryMatch && viewMatch;
+  });
 });
 
 onMounted(fetchOrders);
