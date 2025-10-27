@@ -162,40 +162,20 @@
         class="bg-white p-6 rounded-2xl shadow-lg w-80 md:w-96 relative animate-fade-in text-black"
       >
         <h2 class="text-lg font-semibold text-indigo-700 mb-4 text-center">
-          Enter Admin Key
+          Confirm Admin Assignment
         </h2>
+        <p class="text-sm text-gray-700 text-center mb-6">
+          Are you sure you want to make
+          <span class="font-semibold text-indigo-600">{{
+            selectedUser?.name
+          }}</span>
+          an Admin? <br />
+          This will grant full administrative privileges.
+        </p>
 
-        <div class="relative">
-          <input
-            v-model="secretKey"
-            :type="showSecret ? 'text' : 'password'"
-            placeholder="Enter secret key"
-            class="w-full border border-gray-300 rounded-lg p-2 pr-10 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
-          />
-
+        <div class="flex justify-center mt-4 space-x-2">
           <button
-            type="button"
-            @click="showSecret = !showSecret"
-            class="absolute inset-y-0 right-3 flex items-center justify-center"
-          >
-            <img
-              v-if="showSecret"
-              src="/src/assets/component/EyeOpen.svg"
-              alt="Show"
-              class="w-5 h-5 text-gray-700 hover:opacity-80 transition"
-            />
-            <img
-              v-else
-              src="/src/assets/component/EyeClose.svg"
-              alt="Hide"
-              class="w-5 h-5 text-gray-700 hover:opacity-80 transition"
-            />
-          </button>
-        </div>
-
-        <div class="flex justify-end mt-4 space-x-2">
-          <button
-            @click="confirmSecret"
+            @click="confirmAdminAssignment"
             class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 text-sm"
           >
             Confirm
@@ -260,20 +240,16 @@ const filters = ref({
 });
 
 const showModal = ref(false);
-const secretKey = ref("");
-const showSecret = ref(false);
-let selectedUser = null;
+const selectedUser = ref(null);
 
 const openSecretModal = (user) => {
-  selectedUser = user;
+  selectedUser.value = user;
   showModal.value = true;
-  secretKey.value = "";
 };
 
 const closeModal = () => {
   showModal.value = false;
-  secretKey.value = "";
-  selectedUser = null;
+  selectedUser.value = null;
 };
 
 const showDeleteModal = ref(false);
@@ -289,14 +265,19 @@ const closeDeleteModal = () => {
   showDeleteModal.value = false;
 };
 
-const confirmSecret = async () => {
-  if (!secretKey.value.trim()) return;
-
+const confirmAdminAssignment = async () => {
+  if (!selectedUser.value) return;
   try {
-    const endpoint = `/users/${selectedUser.id}/assign-admin`;
-    await api.patch(endpoint, { secret_key: secretKey.value });
+    await api.patch(`/users/${selectedUser.value.id}/assign-admin`);
+
+    users.value = users.value.map((u) =>
+      u.id === selectedUser.value.id
+        ? { ...u, role_slug: "admin", role_name: "Admin" }
+        : u
+    );
+
     closeModal();
-    fetchUsers();
+    await fetchUsers();
   } catch (err) {
     console.error("Error assigning admin:", err);
     closeModal();
@@ -344,7 +325,7 @@ const toggleRole = async (user) => {
         ? `/users/${user.id}/assign-user`
         : `/users/${user.id}/assign-staff`;
     await api.patch(endpoint);
-    fetchUsers();
+    await fetchUsers();
   } catch (err) {
     console.error("Error updating role:", err);
   }
@@ -357,7 +338,7 @@ const toggleAdmin = async (user) => {
         ? `/users/${user.id}/assign-staff`
         : `/users/${user.id}/assign-admin`;
     await api.patch(endpoint);
-    fetchUsers();
+    await fetchUsers();
   } catch (err) {
     console.error("Error updating admin role:", err);
   }

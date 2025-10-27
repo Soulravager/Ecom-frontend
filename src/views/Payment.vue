@@ -53,7 +53,7 @@
               v-model="paymentType"
               class="text-indigo-600 focus:ring-indigo-500"
             />
-            <span class="text-gray-700">Razorpay</span>
+            <span class="text-gray-700">Online Payment</span>
           </label>
 
           <label class="flex items-center gap-3">

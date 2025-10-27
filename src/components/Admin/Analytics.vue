@@ -25,7 +25,7 @@
       <h2
         class="text-lg md:text-xl font-semibold text-gray-800 mb-4 text-center md:text-left"
       >
-        Sales Stats Filter
+        Most Sold products
       </h2>
 
       <form
@@ -95,7 +95,7 @@
       <h2
         class="text-lg md:text-xl font-semibold text-red-600 mb-4 text-center md:text-left"
       >
-        Low Stock Product
+        Low Stock Products
       </h2>
 
       <table
