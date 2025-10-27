@@ -26,7 +26,6 @@
         alt="Product image"
         class="w-full md:w-1/2 h-80 object-contain rounded-xl bg-white"
       />
-
       <div
         v-else
         class="w-full md:w-1/2 h-72 bg-gray-200 rounded-xl flex items-center justify-center text-gray-500"
@@ -34,6 +33,7 @@
         No Image
       </div>
 
+      <!-- Details -->
       <div class="flex-1">
         <h1 class="text-2xl font-bold text-gray-800 mb-2">
           {{ product.name }}
@@ -50,16 +50,29 @@
             {{ product.stock > 1 ? "Available" : "Out of Stock" }}
           </span>
         </div>
-
-        <button
-          @click="addToCart"
-          :disabled="product.stock <= 1"
-          class="bg-green-500 hover:bg-green-600 text-white text-sm md:text-base px-6 py-3 rounded-lg transition disabled:opacity-60"
-        >
-          Add to Cart
-        </button>
+        <div class="gap-10">
+          <button
+            @click="addToCart"
+            :disabled="product.stock <= 1"
+            class="bg-green-500 hover:bg-green-600 text-white text-sm md:text-base px-6 py-3 rounded-lg transition disabled:opacity-60"
+          >
+            Add to Cart</button
+          ><br class="hidden md:block" />
+          <button
+            @click="toggleChat"
+            class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white text-sm md:text-base px-6 py-3 rounded-lg transition"
+          >
+            {{ showChat ? "Hide Chat" : `Ask about ${product.name}` }}
+          </button>
+        </div>
       </div>
     </div>
+    <GeminiChat
+      v-if="product"
+      :product-id="product.id"
+      :product-name="product.name"
+      :show="showChat"
+    />
     <div
       v-if="showModal"
       class="fixed inset-0 bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50"
@@ -87,10 +100,12 @@ import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import api from "../../api/axios";
 import backbtn from "../../assets/component/backbtn.vue";
+import GeminiChat from "../Gemini/ProductChat.vue";
 
 const route = useRoute();
 const product = ref(null);
 const loading = ref(true);
+const showChat = ref(false);
 
 const showModal = ref(false);
 const modalTitle = ref("");
@@ -102,9 +117,8 @@ const openModal = (title, message) => {
   showModal.value = true;
 };
 
-const closeModal = () => {
-  showModal.value = false;
-};
+const closeModal = () => (showModal.value = false);
+const toggleChat = () => (showChat.value = !showChat.value);
 
 const addToCart = async () => {
   const token = localStorage.getItem("authToken");

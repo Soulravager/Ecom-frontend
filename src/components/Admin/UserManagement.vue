@@ -51,7 +51,7 @@
               :key="user.id"
               class="hover:bg-gray-50 text-gray-700"
             >
-              <td class="p-2 border break-words">{{ user.id }}</td>
+              <td class="p-2 border break-words">{{ user.id.slice(-10) }}</td>
               <td class="p-2 border">{{ user.name }}</td>
               <td class="p-2 border">{{ user.email }}</td>
               <td class="p-2 border">{{ user.role_name }}</td>
