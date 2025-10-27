@@ -59,5 +59,5 @@
 </template>
 
 <script setup>
-import SimleEmo from "./images/SimleEmo.vue";
+import SimleEmo from "../common/HomeEmoji.vue";
 </script>

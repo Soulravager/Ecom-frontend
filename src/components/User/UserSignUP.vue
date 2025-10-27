@@ -77,7 +77,7 @@
 <script setup>
 import { ref } from "vue";
 import api from "../../api/axios";
-import PasswordToggle from "./Reso/PasswordToggle.vue";
+import PasswordToggle from "../common/PasswordToggle.vue";
 
 const name = ref("");
 const email = ref("");
