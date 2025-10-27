@@ -33,7 +33,8 @@
           <div
             v-for="(review, index) in reviews"
             :key="index"
-            class="flex-shrink-0 w-full md:w-1/4 p-4"
+            :class="`flex-shrink-0 p-4`"
+            :style="{ width: `${100 / visibleCards}%` }"
           >
             <div
               class="bg-white rounded-xl shadow-md hover:shadow-lg transition overflow-hidden p-8 flex flex-col justify-between h-full"
@@ -90,13 +91,29 @@ const reviews = ref([
     text: "Very reliable and affordable! My gaming rig has never been this smooth.",
     author: "Satisfied User",
   },
+  {
+    text: "Impressed by the quality of parts and the detailed product info. Makes building PCs easy!",
+    author: "DIY Builder",
+  },
+  {
+    text: "Ordered a custom cooling setup — everything arrived safely and works flawlessly. 10/10 store!",
+    author: "Satisfied User",
+  },
 ]);
 
 const currentIndex = ref(0);
-const visibleCards = ref(window.innerWidth < 768 ? 1 : 4);
+const visibleCards = ref(getVisibleCards());
+
+function getVisibleCards() {
+  const width = window.innerWidth;
+  if (width < 600) return 1;
+  if (width < 1200) return 2;
+  if (width < 1400) return 3;
+  return 4;
+}
 
 const handleResize = () => {
-  visibleCards.value = window.innerWidth < 768 ? 1 : 4;
+  visibleCards.value = getVisibleCards();
 };
 window.addEventListener("resize", handleResize);
 

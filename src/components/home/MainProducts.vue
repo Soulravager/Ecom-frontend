@@ -35,7 +35,8 @@
           <div
             v-for="(product, index) in visibleProducts"
             :key="index"
-            class="flex-shrink-0 w-full md:w-1/5 p-4"
+            :class="`flex-shrink-0 p-4`"
+            :style="{ width: `${100 / visibleCards}%` }"
           >
             <div
               class="bg-white rounded-xl shadow-md hover:shadow-lg transition overflow-hidden"
@@ -85,16 +86,22 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
-import axios from "axios";
 import api from "../../api/axios";
 
 const products = ref([]);
 const currentIndex = ref(0);
 const autoSlide = ref(null);
-const visibleCards = ref(window.innerWidth < 768 ? 1 : 5);
+const visibleCards = ref(getVisibleCards());
+
+function getVisibleCards() {
+  const width = window.innerWidth;
+  if (width < 768) return 1;
+  if (width < 1200) return 3;
+  return 5;
+}
 
 const handleResize = () => {
-  visibleCards.value = window.innerWidth < 768 ? 1 : 5;
+  visibleCards.value = getVisibleCards();
 };
 window.addEventListener("resize", handleResize);
 
@@ -128,7 +135,11 @@ onMounted(() => {
   fetchHotProducts();
   autoSlide.value = setInterval(nextSlide, 30000);
 });
-onBeforeUnmount(() => clearInterval(autoSlide.value));
+
+onBeforeUnmount(() => {
+  clearInterval(autoSlide.value);
+  window.removeEventListener("resize", handleResize);
+});
 </script>
 
 <style scoped></style>
