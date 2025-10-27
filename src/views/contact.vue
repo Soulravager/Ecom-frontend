@@ -84,10 +84,25 @@
 
           <button
             type="submit"
-            class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-lg transition"
+            :disabled="loading"
+            class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-lg transition disabled:opacity-60"
           >
-            Send Message
+            <span v-if="!loading">Send Message</span>
+            <span v-else>Sending...</span>
           </button>
+
+          <p
+            v-if="successMessage"
+            class="text-green-600 font-medium mt-3 text-center"
+          >
+            {{ successMessage }}
+          </p>
+          <p
+            v-if="errorMessage"
+            class="text-red-600 font-medium mt-3 text-center"
+          >
+            {{ errorMessage }}
+          </p>
         </form>
       </div>
     </div>
@@ -96,6 +111,7 @@
 
 <script setup>
 import { ref } from "vue";
+import api from "../api/axios";
 
 const form = ref({
   name: "",
@@ -103,14 +119,38 @@ const form = ref({
   message: "",
 });
 
-const submitForm = () => {
+const loading = ref(false);
+const successMessage = ref("");
+const errorMessage = ref("");
+
+const submitForm = async () => {
+  successMessage.value = "";
+  errorMessage.value = "";
+
   if (!form.value.name || !form.value.email || !form.value.message) {
-    alert("Please fill all fields.");
+    errorMessage.value = "Please fill all fields.";
     return;
   }
 
-  alert(`Thank you, ${form.value.name}! Your message has been sent.`);
-  form.value = { name: "", email: "", message: "" };
+  try {
+    loading.value = true;
+    const response = await api.post("/contacts", {
+      name: form.value.name,
+      email: form.value.email,
+      message: form.value.message,
+    });
+
+    successMessage.value =
+      response.data.message || "Message sent successfully!";
+    form.value = { name: "", email: "", message: "" };
+  } catch (error) {
+    console.error(error);
+    errorMessage.value =
+      error.response?.data?.message ||
+      "Failed to send message. Please try again.";
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
 

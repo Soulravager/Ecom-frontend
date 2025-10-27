@@ -106,12 +106,6 @@ const fetchUserData = async () => {
 
 const fetchCart = async () => {
   const token = localStorage.getItem("authToken");
-  if (!token) {
-    alert("Please log in to continue checkout.");
-    window.location.href = "/login";
-    return;
-  }
-
   try {
     const { data } = await api.get("/cart", {
       headers: { Authorization: `Bearer ${token}` },
@@ -124,18 +118,7 @@ const fetchCart = async () => {
 };
 
 const placeOrder = async () => {
-  if (!cartItems.value.length) {
-    alert("Your cart is empty!");
-    return;
-  }
-
   const token = localStorage.getItem("authToken");
-  if (!token) {
-    alert("Please log in before placing an order.");
-    window.location.href = "/login";
-    return;
-  }
-
   if (!userData.value) {
     await fetchUserData();
   }
