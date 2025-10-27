@@ -124,11 +124,6 @@ const loading = ref(true);
 
 const fetchCart = async () => {
   const token = localStorage.getItem("authToken");
-  if (!token) {
-    alert("Please log in to view your cart.");
-    window.location.href = "/login";
-    return;
-  }
 
   try {
     const res = await api.get("/cart", {
@@ -139,7 +134,6 @@ const fetchCart = async () => {
     totalAmount.value = res.data.total_amount;
   } catch (err) {
     console.error(err);
-    alert("Error fetching cart items.");
   } finally {
     loading.value = false;
   }

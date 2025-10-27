@@ -85,12 +85,14 @@ import Products from "../components/Admin/ProductManagement.vue";
 import Orders from "../components/Admin/OrderManagement.vue";
 import Staff from "../components/Admin/StaffManagement.vue";
 import Users from "../components/Admin/UserManagement.vue";
+import FeedBack from "../components/Admin/FeedBack.vue";
 const components = {
   Analytics,
   Products,
   Orders,
   Users,
   Staff,
+  FeedBack,
 };
 
 const activeTab = ref("Analytics");
@@ -101,6 +103,7 @@ const menuItems = [
   { name: "Analytics", label: "Dashboard " },
   { name: "Products", label: "Products" },
   { name: "Orders", label: "Order Management" },
+  { name: "FeedBack", label: "Feedback" },
   { name: "Staff", label: "Staff Management" },
   { name: "Users", label: "Users" },
 ];

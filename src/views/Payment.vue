@@ -82,11 +82,22 @@
         Your cart is empty.
       </div>
     </div>
+
+    <BaseModal
+      :show="showModal"
+      :title="modalTitle"
+      :message="modalMessage"
+      @close="closeModal"
+    />
   </section>
 </template>
+
 <script setup>
 import { ref, onMounted } from "vue";
 import api from "../api/axios";
+
+import BaseModal from "../components/common/ModelPopup.vue";
+import useModal from "../components/common/ModelPopup";
 
 const cartItems = ref([]);
 const totalAmount = ref(0);
@@ -95,12 +106,16 @@ const isProcessing = ref(false);
 const user = ref(null);
 const userData = ref(null);
 
+const { showModal, modalTitle, modalMessage, openModal, closeModal } =
+  useModal();
+
 const fetchUserData = async () => {
   try {
     const { data } = await api.get("/user-data");
     userData.value = data.data;
   } catch (err) {
     console.error("Error fetching user data:", err);
+    openModal("Error", "Failed to load user data. Please try again.");
   }
 };
 
@@ -114,6 +129,7 @@ const fetchCart = async () => {
     totalAmount.value = data.total_amount;
   } catch (err) {
     console.error("Error loading cart:", err);
+    openModal("Error", "Failed to load your cart. Please refresh.");
   }
 };
 
@@ -137,12 +153,13 @@ const placeOrder = async () => {
     if (paymentType.value === "razorpay") {
       openRazorpay(order, token);
     } else {
-      alert("Order placed with Cash on Delivery!");
-      window.location.href = "/profile";
+      openModal("Order Placed", "Your Cash on Delivery order has been placed!");
+      setTimeout(() => (window.location.href = "/profile"), 3000);
     }
   } catch (error) {
     console.error("Error placing order:", error);
-    alert("Failed to place order.");
+
+    openModal("Error", "Failed to place your order. Please try again.");
   } finally {
     isProcessing.value = false;
   }
@@ -170,10 +187,12 @@ const openRazorpay = (order, token) => {
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
-        window.location.href = "/profile";
+        openModal("Payment Successful", "Your order has been placed!");
+        setTimeout(() => (window.location.href = "/profile"), 2000);
       } catch (err) {
         console.error("Payment verification failed:", err);
-        alert("Payment failed. Please try again.");
+
+        openModal("Payment Failed", "Payment verification failed. Try again.");
       }
     },
     prefill: {

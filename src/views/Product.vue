@@ -54,25 +54,12 @@
       </div>
     </div>
 
-    <div
-      v-if="showModal"
-      class="fixed inset-0 bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50"
-    >
-      <div
-        class="bg-white rounded-2xl shadow-xl p-6 w-80 text-center transform transition-all"
-      >
-        <h2 class="text-xl font-semibold text-gray-800 mb-2">
-          {{ modalTitle }}
-        </h2>
-        <p class="text-gray-600 mb-6">{{ modalMessage }}</p>
-        <button
-          @click="closeModal"
-          class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition"
-        >
-          OK
-        </button>
-      </div>
-    </div>
+    <BaseModal
+      :show="showModal"
+      :title="modalTitle"
+      :message="modalMessage"
+      @close="closeModal"
+    />
   </section>
 </template>
 
@@ -80,24 +67,16 @@
 import { ref, onMounted } from "vue";
 import api from "../api/axios";
 import { useRouter } from "vue-router";
+import BaseModal from "../components/common/ModelPopup.vue";
+import useModal from "../components/common/ModelPopup";
 
 const router = useRouter();
 const products = ref([]);
 const loading = ref(true);
 const addingToCartId = ref(null);
 
-const showModal = ref(false);
-const modalTitle = ref("");
-const modalMessage = ref("");
-
-const openModal = (title, message) => {
-  modalTitle.value = title;
-  modalMessage.value = message;
-  showModal.value = true;
-};
-const closeModal = () => {
-  showModal.value = false;
-};
+const { showModal, modalTitle, modalMessage, openModal, closeModal } =
+  useModal();
 
 const fetchProducts = async () => {
   try {
