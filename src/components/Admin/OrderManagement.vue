@@ -146,8 +146,8 @@
             >
             <select
               v-model="form.delivery_status"
-              class="w-full border rounded-lg p-2 text-gray-950 focus:ring-2 focus:ring-indigo-400"
-              :disabled="form.delivery_status === 'cancelled_by_user'"
+              class="w-full border rounded-lg p-2 text-gray-950 focus:ring-2 focus:ring-indigo-400 disabled:bg-gray-100 disabled:text-gray-500"
+              :disabled="isDeliveryLocked"
             >
               <option
                 v-if="form.delivery_status === 'cancelled_by_user'"
@@ -155,9 +155,17 @@
               >
                 Cancelled by User
               </option>
+
+              <option
+                v-else-if="form.delivery_status === 'cancelled_by_seller'"
+                value="cancelled_by_seller"
+              >
+                Cancelled by Seller
+              </option>
+
               <template v-else>
                 <option value="">Select Delivery Status</option>
-                <option value="pending">Pending</option>
+                <option value="pending">Ordered</option>
                 <option value="shipped">Shipped</option>
                 <option value="on_the_way">On The Way</option>
                 <option value="delivered">Delivered</option>
@@ -165,7 +173,6 @@
               </template>
             </select>
           </div>
-
           <button
             type="submit"
             class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg font-semibold"
@@ -193,6 +200,7 @@ const form = ref({
   status: "",
   delivery_status: "",
 });
+const isDeliveryLocked = ref(false);
 
 const fetchOrders = async () => {
   try {
@@ -209,6 +217,11 @@ const openEditModal = (order) => {
   editId.value = order.id;
   form.value.status = order.status;
   form.value.delivery_status = order.delivery_status;
+  isDeliveryLocked.value = [
+    "cancelled_by_user",
+    "cancelled_by_seller",
+  ].includes(order.delivery_status);
+
   showModal.value = true;
 };
 
