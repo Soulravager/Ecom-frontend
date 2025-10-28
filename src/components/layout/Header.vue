@@ -21,10 +21,19 @@
         <a href="/contact" class="text-gray-700 hover:text-indigo-600"
           >Contact</a
         >
-        <div v-if="user">
-          <a href="/cart" class="text-gray-700 hover:text-indigo-600"
-            ><CartLogo
-          /></a>
+        <div v-if="user" class="relative">
+          <a
+            href="/cart"
+            class="text-gray-700 hover:text-indigo-600 relative inline-block"
+          >
+            <CartLogo />
+            <span
+              v-if="cartCount > 0"
+              class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-semibold rounded-full w-3 h-3 flex items-center justify-center"
+            >
+              {{ cartCount }}
+            </span>
+          </a>
         </div>
 
         <div v-if="user" class="relative">
@@ -116,6 +125,16 @@ import MainLogo from "./MainLogo.vue";
 import api from "../../api/axios";
 import CartLogo from "../../components/cart/CartLogo.vue";
 
+const cartCount = ref(0);
+const fetchCartCount = async () => {
+  try {
+    const response = await api.get("/cart");
+    cartCount.value = response.data.items.length;
+  } catch (error) {
+    cartCount.value = 0;
+  }
+};
+
 const open = ref(false);
 const dropdownOpen = ref(false);
 const user = ref(null);
@@ -124,6 +143,7 @@ onMounted(() => {
   const storedUser = localStorage.getItem("user");
   if (storedUser) {
     user.value = JSON.parse(storedUser);
+    fetchCartCount();
   }
 });
 
