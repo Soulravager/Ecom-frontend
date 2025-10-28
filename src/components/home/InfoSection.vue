@@ -40,7 +40,7 @@
 
         <div class="flex flex-col items-center md:items-start text-gray-700">
           <div class="flex items-center gap-3">
-            <SimleEmo />
+            <SmileEmoji />
             <h2 class="text-2xl font-semibold text-gray-800">60000+</h2>
           </div>
           <p class="text-sm mt-1 text-gray-500">Happy Customers</p>
@@ -51,7 +51,7 @@
     <div class="md:w-1/2 flex justify-center mb-8 md:mb-0">
       <img
         src="../../assets/common/3.png"
-        alt="Cleaning Image"
+        alt="No Image"
         class="w-4/5 md:w-full max-w-md lg:max-w-lg object-contain"
       />
     </div>
@@ -59,5 +59,5 @@
 </template>
 
 <script setup>
-import SimleEmo from "./images/SimleEmo.vue";
+import SmileEmoji from "../common/HomeEmoji.vue";
 </script>

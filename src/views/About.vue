@@ -2,7 +2,6 @@
   <section
     class="min-h-screen px-6 py-12 md:px-16 lg:px-24 flex flex-col items-center"
   >
-    <!-- Heading -->
     <div class="text-center mb-10">
       <h1 class="text-4xl md:text-5xl font-bold text-indigo-600 mb-3">
         About Shopee
@@ -13,11 +12,9 @@
       </p>
     </div>
 
-    <!-- Main About Content -->
     <div
       class="w-full max-w-5xl bg-white rounded-2xl shadow-lg p-6 md:p-10 flex flex-col md:flex-row items-center gap-10"
     >
-      <!-- Left Image -->
       <div class="flex-1 flex justify-center">
         <img
           src="../assets/common/3.png"
@@ -26,7 +23,6 @@
         />
       </div>
 
-      <!-- Right Text -->
       <div class="flex-1 space-y-5 text-gray-700">
         <h2 class="text-2xl md:text-3xl font-semibold text-indigo-600">
           Built for Builders
@@ -49,7 +45,6 @@
       </div>
     </div>
 
-    <!-- Mission / Vision -->
     <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
       <div
         class="bg-white rounded-2xl shadow-md p-6 md:p-8 hover:shadow-lg transition"
@@ -74,9 +69,7 @@
   </section>
 </template>
 
-<script setup>
-// no script needed for static content
-</script>
+<script setup></script>
 
 <style scoped>
 section {

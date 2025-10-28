@@ -14,9 +14,7 @@
       </a>
     </div>
 
-    <!-- Carousel -->
     <div class="relative flex items-center justify-center">
-      <!-- Left Arrow -->
       <button
         @click="prevSlide"
         class="absolute left-[-10px] md:left-[-25px] z-10 bg-indigo-600 text-white w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full shadow-md hover:bg-indigo-700 transition"
@@ -24,7 +22,6 @@
         <img src="../../assets/common/leftbtn.png" alt="Left" class="w-5 h-5" />
       </button>
 
-      <!--  MAIN -->
       <div class="overflow-hidden w-full">
         <div
           class="flex transition-transform duration-500 ease-in-out"
@@ -35,37 +32,36 @@
           <div
             v-for="(product, index) in visibleProducts"
             :key="index"
-            class="flex-shrink-0 w-full md:w-1/5 p-4"
+            :class="`flex-shrink-0 p-4`"
+            :style="{ width: `${100 / visibleCards}%` }"
           >
             <div
               class="bg-white rounded-xl shadow-md hover:shadow-lg transition overflow-hidden"
             >
-              <div
-                class="bg-[#ffffff] rounded-xl p-5 flex items-center justify-center"
-              >
-                <img
-                  :src="product.image"
-                  :alt="product.name"
-                  class="w-full h-40 object-contain"
-                />
-              </div>
+              <router-link :to="`/item/${product.id}`">
+                <div
+                  class="bg-[#ffffff] rounded-xl p-5 flex items-center justify-center"
+                >
+                  <img
+                    :src="product.image"
+                    :alt="product.name"
+                    class="w-full h-40 object-contain"
+                  />
+                </div>
+              </router-link>
+
               <div class="p-4 text-left">
-                <center>
+                <div class="text-center">
                   <h3 class="font-semibold text-gray-700 text-sm md:text-base">
                     {{ product.name }}
                   </h3>
-                </center>
-                <!-- <p class="text-red-500 text-xs md:text-sm">
-                  ₹
-                  {{ product.category || "—" }}
-                </p> -->
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Right Arrow -->
       <button
         @click="nextSlide"
         class="absolute right-[-10px] md:right-[-25px] z-10 bg-indigo-600 text-white w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full shadow-md hover:bg-indigo-700 transition"
@@ -82,16 +78,22 @@
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
-import axios from "axios";
 import api from "../../api/axios";
 
 const products = ref([]);
 const currentIndex = ref(0);
 const autoSlide = ref(null);
-const visibleCards = ref(window.innerWidth < 768 ? 1 : 5);
+const visibleCards = ref(getVisibleCards());
+
+function getVisibleCards() {
+  const width = window.innerWidth;
+  if (width < 768) return 1;
+  if (width < 1200) return 3;
+  return 5;
+}
 
 const handleResize = () => {
-  visibleCards.value = window.innerWidth < 768 ? 1 : 5;
+  visibleCards.value = getVisibleCards();
 };
 window.addEventListener("resize", handleResize);
 
@@ -114,18 +116,19 @@ const fetchHotProducts = async () => {
       id: item.product_id,
       name: item.product_name,
       image: item.image ? `${item.image}` : "https://via.placeholder.com/150",
-      category: item.price || "Category not available",
     }));
-  } catch (error) {
-    console.error("Failed to load hot products:", error);
-  }
+  } catch (error) {}
 };
 
 onMounted(() => {
   fetchHotProducts();
   autoSlide.value = setInterval(nextSlide, 30000);
 });
-onBeforeUnmount(() => clearInterval(autoSlide.value));
+
+onBeforeUnmount(() => {
+  clearInterval(autoSlide.value);
+  window.removeEventListener("resize", handleResize);
+});
 </script>
 
 <style scoped></style>

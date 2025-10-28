@@ -3,27 +3,24 @@
     <h1 class="text-2xl md:text-3xl font-bold text-indigo-700 mb-6 text-center">
       Product Management
     </h1>
+    <div
+      class="flex flex-col md:flex-row justify-between items-center mb-6 gap-3"
+    >
+      <input
+        v-model="searchQuery"
+        type="text"
+        placeholder="Search by name or description..."
+        class="w-full md:w-1/2 border border-gray-300 text-black rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-indigo-400"
+      />
 
-    <div class="bg-white shadow-md rounded-xl p-4 md:p-6 overflow-x-auto">
-      <div
-        class="flex flex-col md:flex-row justify-between items-center mb-6 gap-3"
+      <button
+        @click="openAddModal"
+        class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 text-sm"
       >
-        <input
-          v-model="searchQuery"
-          type="text"
-          placeholder="Search by name or description..."
-          class="w-full md:w-1/2 border border-gray-300 text-black rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-indigo-400"
-        />
-
-        <button
-          @click="openAddModal"
-          class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 text-sm"
-        >
-          + Add Product
-        </button>
-      </div>
-
-      <!-- Product Table -->
+        + Add Product
+      </button>
+    </div>
+    <div class="bg-white shadow-md rounded-xl p-4 md:p-6 overflow-x-auto">
       <table class="min-w-full border border-gray-200 text-sm">
         <thead class="bg-gray-100">
           <tr>
@@ -61,7 +58,7 @@
                 Edit
               </button>
               <button
-                @click="deleteProduct(product.id)"
+                @click="confirmDelete(product.id)"
                 class="px-3 py-1 rounded-lg bg-red-600 text-white text-xs hover:bg-red-700 transition"
               >
                 Delete
@@ -79,7 +76,6 @@
       </div>
     </div>
 
-    <!-- popup window -->
     <div
       v-if="showModal"
       class="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center z-50"
@@ -174,12 +170,42 @@
         </form>
       </div>
     </div>
+
+    <BaseModal
+      :show="showDeleteModal"
+      :title="modalTitle"
+      :message="modalMessage"
+      :confirmText="confirmText"
+      closeText="Close"
+      @close="closeModalPopup"
+      @confirm="handleConfirmDelete"
+    >
+      <template #actions>
+        <div class="flex justify-center gap-4">
+          <button
+            v-if="confirmText"
+            @click="handleConfirmDelete"
+            class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 text-sm"
+          >
+            {{ confirmText }}
+          </button>
+          <button
+            @click="closeModalPopup"
+            class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-lg text-sm"
+          >
+            Close
+          </button>
+        </div>
+      </template>
+    </BaseModal>
   </section>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import api from "/src/api/axios.js";
+import BaseModal from "../../components/common/ModelPopup.vue";
+import useModal from "../../components/common/ModelPopup.js";
 
 const loading = ref(true);
 const products = ref([]);
@@ -188,6 +214,15 @@ const showModal = ref(false);
 const isEditing = ref(false);
 const editId = ref(null);
 const searchQuery = ref("");
+
+const {
+  showModal: showDeleteModal,
+  modalTitle,
+  modalMessage,
+  confirmText,
+  openModal,
+  closeModal: closeModalPopup,
+} = useModal();
 
 const form = ref({
   name: "",
@@ -203,8 +238,6 @@ const fetchProducts = async () => {
   try {
     const res = await api.get("/products");
     products.value = res.data || [];
-  } catch (err) {
-    console.error("Error fetching products:", err);
   } finally {
     loading.value = false;
   }
@@ -225,9 +258,7 @@ const addProduct = async () => {
 
     closeModal();
     fetchProducts();
-  } catch (err) {
-    console.error("Error adding product:", err);
-  }
+  } catch (err) {}
 };
 
 const editProduct = (product) => {
@@ -259,18 +290,30 @@ const updateProduct = async () => {
 
     closeModal();
     fetchProducts();
-  } catch (err) {
-    console.error("Error updating product:", err);
-  }
+  } catch (err) {}
 };
 
-const deleteProduct = async (id) => {
-  if (!confirm("Are you sure you want to delete this product?")) return;
+const productIdToDelete = ref(null);
+
+const confirmDelete = (id) => {
+  productIdToDelete.value = id;
+  openModal(
+    "Delete Product?",
+    "Are you sure you want to delete this product?",
+    "Yes"
+  );
+};
+
+const handleConfirmDelete = async () => {
+  if (!productIdToDelete.value) return;
   try {
-    await api.delete(`/products/${id}`);
-    products.value = products.value.filter((p) => p.id !== id);
+    await api.delete(`/products/${productIdToDelete.value}`);
+    products.value = products.value.filter(
+      (p) => p.id !== productIdToDelete.value
+    );
+    closeModalPopup();
   } catch (err) {
-    console.error("Error deleting product:", err);
+    closeModalPopup();
   }
 };
 

@@ -25,7 +25,7 @@
       <h2
         class="text-lg md:text-xl font-semibold text-gray-800 mb-4 text-center md:text-left"
       >
-        Sales Stats Filter
+        Most Sold products
       </h2>
 
       <form
@@ -95,7 +95,7 @@
       <h2
         class="text-lg md:text-xl font-semibold text-red-600 mb-4 text-center md:text-left"
       >
-        Low Stock Product
+        Low Stock Products
       </h2>
 
       <table
@@ -151,18 +151,14 @@ const fetchStats = async () => {
       { title: "Total Sales", value: "₹" + data.total_sales },
       { title: "Net Stock", value: data.net_stock },
     ];
-  } catch (error) {
-    console.error("Error fetching stats:", error);
-  }
+  } catch (error) {}
 };
 
 const fetchLowStock = async () => {
   try {
     const res = await api.get("/dashboard/stockstat");
     lowStock.value = res.data.low_stock_products || [];
-  } catch (error) {
-    console.error("Error fetching low stock:", error);
-  }
+  } catch (error) {}
 };
 
 const fetchSalesStats = async () => {
@@ -173,7 +169,6 @@ const fetchSalesStats = async () => {
     });
     salesStats.value = res.data.sales_stats;
   } catch (error) {
-    console.error("Error fetching sales stats:", error);
     salesStats.value = null;
   }
 };

@@ -1,14 +1,14 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../views/home.vue";
+import Home from "../views/Home.vue";
 import About from "../views/About.vue";
-import Contact from "../views/contact.vue";
+import Contact from "../views/Contact.vue";
 import Product from "../views/Product.vue";
 import Login from "../views/Login.vue";
-import UserProfile from "../components/User/UserProfile.vue";
+import UserAccount from "../views/UserAccount.vue";
 import Admin from "../views/Admin.vue";
-import Productshow from "../views/Productshow.vue";
+import ProductShow from "../components/product/ProductShow.vue";
+import Payment from "../views/Payment.vue";
 import Cart from "../views/Cart.vue";
-import Analytics from "../components/Admin/Analytics.vue";
 
 const routes = [
   {
@@ -23,6 +23,7 @@ const routes = [
   },
   { path: "/contact", name: "contact", component: Contact },
   { path: "/product", name: "product", component: Product },
+  { path: "/item/:id", name: "ProductShow", component: ProductShow },
   {
     path: "/login",
     name: "Login",
@@ -35,23 +36,24 @@ const routes = [
     component: Cart,
     meta: { requiresAuth: true },
   },
-  {
-    path: "/item/:id",
-    name: "Productshow",
-    component: Productshow,
-    meta: { requiresAuth: true },
-  },
+
   {
     path: "/admin",
     name: "Admin",
     component: Admin,
     meta: { requiresAuth: true, requiresAdminOrStaff: true },
   },
+  {
+    path: "/payment",
+    name: "Payment",
+    component: Payment,
+    meta: { requiresAuth: true },
+  },
 
   {
     path: "/profile",
     name: "profile",
-    component: UserProfile,
+    component: UserAccount,
     meta: { requiresAuth: true },
   },
 

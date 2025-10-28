@@ -16,7 +16,7 @@
           v-if="product.image"
           :src="product.image"
           alt="Product image"
-          class="w-full h-56 object-cover rounded-xl mb-4"
+          class="w-60 h-56 object-fit rounded-xl mb-4"
         />
         <div
           v-else
@@ -42,7 +42,6 @@
             :disabled="product.stock <= 1"
           >
             <span v-if="product.stock <= 1">Out of stock</span>
-            <!-- <span v-else-if="product.product_id == Cart.product_id">tst</span> -->
             <span v-else>Add to Cart</span>
           </button>
           <button
@@ -54,40 +53,49 @@
         </div>
       </div>
     </div>
+
+    <BaseModal
+      :show="showModal"
+      :title="modalTitle"
+      :message="modalMessage"
+      @close="closeModal"
+    />
   </section>
 </template>
+
 <script setup>
 import { ref, onMounted } from "vue";
 import api from "../api/axios";
 import { useRouter } from "vue-router";
-import Cart from "./Cart.vue";
+import BaseModal from "../components/common/ModelPopup.vue";
+import useModal from "../components/common/ModelPopup";
 
 const router = useRouter();
 const products = ref([]);
 const loading = ref(true);
 const addingToCartId = ref(null);
 
+const { showModal, modalTitle, modalMessage, openModal, closeModal } =
+  useModal();
+
 const fetchProducts = async () => {
   try {
     const res = await api.get("/products");
     products.value = res.data;
-  } catch (error) {
-    console.error("Error fetching products:", error);
   } finally {
     loading.value = false;
   }
 };
 
 const viewProduct = (product) => {
-  router.push({ name: "Productshow", params: { id: product.id } });
+  router.push({ name: "ProductShow", params: { id: product.id } });
 };
 
 const addToCart = async (product) => {
   const token = localStorage.getItem("authToken");
 
   if (!token) {
-    alert("Please log in to add items to your cart.");
-    router.push("/login");
+    openModal("Login Required", "Please log in to add items to your cart.");
     return;
   }
 
@@ -98,16 +106,7 @@ const addToCart = async (product) => {
       product_id: product.id,
       quantity: 1,
     });
-    alert(`Added "${product.name}" to your cart!`);
-  } catch (err) {
-    console.error("Error adding to cart:", err);
-    if (err.response?.status === 401) {
-      alert("Session expired. Please log in again.");
-      localStorage.removeItem("authToken");
-      router.push("/login");
-    } else {
-      alert("Failed to add to cart. Try again later.");
-    }
+    openModal("Added to Cart", `${product.name} has been added to your cart!`);
   } finally {
     addingToCartId.value = null;
   }
@@ -116,18 +115,19 @@ const addToCart = async (product) => {
 onMounted(fetchProducts);
 </script>
 
-<!-- 
 <style scoped>
 .line-clamp-1 {
   display: -webkit-box;
   -webkit-line-clamp: 1;
+  line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-</style> -->
+</style>

@@ -3,18 +3,16 @@
     <div
       class="flex flex-col md:flex-row justify-between items-start px-4 md:px-6 lg:px-0 gap-8 md:gap-12 w-full max-w-[1600px] mx-0"
     >
-      <!-- Left -->
       <div class="flex-1 lg:ml-[40px]">
         <MainLogo class="mb-4" />
 
         <p class="text-sm text-gray-600 leading-6 mb-1">
-          Shoppee the E-commerce site.
+          Shopee the E-commerce site.
         </p>
         <p class="text-sm text-gray-600 leading-6">
           Developed by Alvi - Your go-to platform for all things shopping!
         </p>
 
-        <!-- Social -->
         <div class="flex items-center gap-4 mt-5">
           <a href="#" aria-label="Facebook">
             <img :src="fbIcon" alt="Facebook" />
@@ -23,12 +21,11 @@
             <img :src="xIcon" alt="X" />
           </a>
           <a href="#" aria-label="Instagram">
-            <img :src="instaIcon" alt="Instagram" />
+            <img :src="InstagramLogo" alt="Instagram" />
           </a>
         </div>
       </div>
 
-      <!-- Links -->
       <div
         class="flex flex-row sm:flex-row gap-20 md:gap-[80px] lg:gap-[100px] md:pt-[.5%] lg:pr-[80px] lg:mr-[80px]"
       >
@@ -59,7 +56,6 @@
           </ul>
         </div>
 
-        <!-- Exytra Links -->
         <div>
           <h4 class="text-indigo-700 font-semibold text-base mb-4">Links</h4>
           <ul class="space-y-2">
@@ -89,21 +85,19 @@
       </div>
     </div>
 
-    <!-- Bottom -->
     <div
       class="bg-indigo-600 text-white text-center mt-6 py-1.5 text-sm font-medium"
     >
       <p>© 2025 Shopee — Built by Alvi</p>
     </div>
 
-    <!--  Top Button -->
-    <a
-      href="#"
+    <button
+      @click="scrollToTop"
       class="absolute bottom-[10%] md:bottom-[30%] right-8 md:right-20 bg-indigo-600 text-white w-[45px] h-[45px] rounded-full flex justify-center items-center text-lg hover:bg-indigo-700 transition"
       aria-label="Back to top"
     >
       <i class="fas fa-chevron-up"></i>
-    </a>
+    </button>
   </footer>
 </template>
 
@@ -111,5 +105,15 @@
 import MainLogo from "./MainLogo.vue";
 import fbIcon from "../../assets/SocialMedia/fb.png";
 import xIcon from "../../assets/SocialMedia/x.png";
-import instaIcon from "../../assets/SocialMedia/insta.png";
+import InstagramLogo from "../../assets/SocialMedia/instagram.png";
+
+const scrollToTop = () => {
+  const appContainer = document.getElementById("app");
+
+  if (appContainer && appContainer.scrollTo) {
+    appContainer.scrollTo({ top: 0, behavior: "smooth" });
+  } else {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+};
 </script>

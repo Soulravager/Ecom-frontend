@@ -5,16 +5,15 @@
     <div
       class="flex flex-col md:flex-row gap-6 md:gap-10 items-stretch justify-center w-full px-4 sm:px-6"
     >
-      <!-- <WelcomeCard
+      <WelcomeCard
         :title="isLogin ? 'Welcome Back!' : 'Join Us Today!'"
         :message="
           isLogin
             ? 'Sign in to continue Shopping.'
             : 'Create your account to start your Shopping.'
         "
-      /> -->
+      />
 
-      <!-- Right Card -->
       <section
         class="flex flex-col items-center justify-center bg-white rounded-xl shadow-lg px-5 py-8 sm:px-8 sm:py-10 md:px-10 md:py-12 w-full md:w-[400px]"
       >
@@ -25,7 +24,6 @@
             {{ isLogin ? "Login to Your Account" : "Create a New Account" }}
           </h1>
 
-          <!-- Components -->
           <UserLogin v-if="isLogin" />
           <UserSignUP v-else />
 

@@ -1,10 +1,8 @@
 <template>
   <header class="bg-white shadow w-full sticky top-0 left-0 z-50">
     <div class="flex justify-between items-center h-16 px-4 md:px-10">
-      <!-- LOGO -->
       <MainLogo />
 
-      <!--  mobilw btn  -->
       <button
         @click="open = !open"
         aria-label="Toggle menu"
@@ -14,7 +12,6 @@
         <i v-else class="fa fa-times"></i>
       </button>
 
-      <!-- Desktop Nav -->
       <nav class="hidden md:flex items-center space-x-6 relative">
         <a href="/" class="text-gray-700 hover:text-indigo-600">Home</a>
         <a href="/product" class="text-gray-700 hover:text-indigo-600"
@@ -24,13 +21,21 @@
         <a href="/contact" class="text-gray-700 hover:text-indigo-600"
           >Contact</a
         >
-        <div v-if="user">
-          <a href="/cart" class="text-gray-700 hover:text-indigo-600"
-            ><cartlogo
-          /></a>
+        <div v-if="user" class="relative">
+          <a
+            href="/cart"
+            class="text-gray-700 hover:text-indigo-600 relative inline-block"
+          >
+            <CartLogo />
+            <span
+              v-if="cartCount > 0"
+              class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-semibold rounded-full w-3 h-3 flex items-center justify-center"
+            >
+              {{ cartCount }}
+            </span>
+          </a>
         </div>
 
-        <!-- user login part -->
         <div v-if="user" class="relative">
           <button
             @click="toggleDropdown"
@@ -40,7 +45,6 @@
             <i class="fa fa-caret-down"></i>
           </button>
 
-          <!-- Dropmenu -->
           <transition name="fade">
             <div
               v-if="dropdownOpen"
@@ -61,7 +65,6 @@
           </transition>
         </div>
 
-        <!-- not logged -->
         <a
           v-else
           href="/login"
@@ -72,7 +75,6 @@
       </nav>
     </div>
 
-    <!-- Mobile -->
     <transition name="fade">
       <div v-show="open" class="md:hidden bg-white border-t w-full">
         <div class="px-6 py-4 space-y-2">
@@ -82,7 +84,6 @@
           <a href="/contact" class="block text-gray-700 py-2">Contact</a>
 
           <div class="pt-2 border-t mt-2">
-            <!-- Login phone -->
             <div v-if="user">
               <div v-if="user">
                 <a
@@ -104,7 +105,6 @@
               </button>
             </div>
 
-            <!-- notlogged phone -->
             <a
               v-else
               href="/login"
@@ -122,8 +122,18 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import MainLogo from "./MainLogo.vue";
-import api from "../../api/axios"; //need to check the file path later !!!!!!!!!
-import cartlogo from "../../components/cart/CartLogo.vue";
+import api from "../../api/axios";
+import CartLogo from "../../components/cart/CartLogo.vue";
+
+const cartCount = ref(0);
+const fetchCartCount = async () => {
+  try {
+    const response = await api.get("/cart");
+    cartCount.value = response.data.items.length;
+  } catch (error) {
+    cartCount.value = 0;
+  }
+};
 
 const open = ref(false);
 const dropdownOpen = ref(false);
@@ -133,6 +143,7 @@ onMounted(() => {
   const storedUser = localStorage.getItem("user");
   if (storedUser) {
     user.value = JSON.parse(storedUser);
+    fetchCartCount();
   }
 });
 
@@ -143,9 +154,7 @@ const toggleDropdown = () => {
 const logout = async () => {
   try {
     await api.post("/logout");
-  } catch (error) {
-    console.error("Logout failed:", error);
-  }
+  } catch (error) {}
   localStorage.removeItem("authToken");
   localStorage.removeItem("user");
   user.value = null;

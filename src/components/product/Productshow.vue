@@ -4,7 +4,7 @@
       @click="$router.push('/product')"
       class="mb-4 flex items-center text-indigo-700 font-medium hover:text-indigo-800 transition"
     >
-      <backbtn />
+      <back_btn />
       Back to Products
     </button>
 
@@ -26,7 +26,6 @@
         alt="Product image"
         class="w-full md:w-1/2 h-80 object-contain rounded-xl bg-white"
       />
-
       <div
         v-else
         class="w-full md:w-1/2 h-72 bg-gray-200 rounded-xl flex items-center justify-center text-gray-500"
@@ -50,54 +49,98 @@
             {{ product.stock > 1 ? "Available" : "Out of Stock" }}
           </span>
         </div>
-
-        <button
-          @click="addToCart"
-          :disabled="product.stock <= 1"
-          class="bg-green-500 hover:bg-green-600 text-white text-sm md:text-base px-6 py-3 rounded-lg transition disabled:opacity-60"
-        >
-          Add to Cart
-        </button>
+        <div class="gap-10">
+          <button
+            @click="addToCart"
+            :disabled="product.stock <= 1"
+            class="bg-green-500 hover:bg-green-600 text-white text-sm md:text-base px-6 py-3 mr-2 rounded-lg transition disabled:opacity-60"
+          >
+            Add to Cart</button
+          ><br class="hidden md:block" />
+          <button
+            @click="toggleChat"
+            class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white text-sm md:text-base px-6 py-3 rounded-lg transition"
+          >
+            {{ showChat ? "Hide Chat" : `Ask about ${product.name}` }}
+          </button>
+        </div>
       </div>
     </div>
+    <GeminiChat
+      v-if="product"
+      :product-id="product.id"
+      :product-name="product.name"
+      :show="showChat"
+    />
+    <BaseModal
+      :show="showModal"
+      :title="modalTitle"
+      :message="modalMessage"
+      @close="closeModal"
+    />
   </section>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import api from "../api/axios";
-import backbtn from "../assets/component/backbtn.vue";
+import api from "../../api/axios";
+import back_btn from "../../assets/component/backBtn.vue";
+import GeminiChat from "../Gemini/ProductChat.vue";
+import BaseModal from "../common/ModelPopup.vue";
+import useModal from "../common/ModelPopup";
 
 const route = useRoute();
 const product = ref(null);
 const loading = ref(true);
+const showChat = ref(false);
 
-const fetchProduct = async () => {
-  try {
-    const res = await api.get(`/products/${route.params.id}`);
-    product.value = res.data;
-  } catch (err) {
-    console.error("Error fetching product:", err);
-  } finally {
-    loading.value = false;
-  }
-};
+const { showModal, modalTitle, modalMessage, openModal, closeModal } =
+  useModal();
+
+const toggleChat = () => (showChat.value = !showChat.value);
 
 const addToCart = async () => {
+  const token = localStorage.getItem("authToken");
+
+  if (!token) {
+    openModal("Login Required", "Please log in to add items to your cart.");
+    return;
+  }
+
   try {
     await api.post("/cart", {
       product_id: product.value.id,
       quantity: 1,
     });
-    alert(`Added "${product.value.name}" to your cart!`);
+    openModal(
+      "Added to Cart",
+      `${product.value.name} has been added to your cart!`
+    );
   } catch (err) {
     console.error("Error adding to cart:", err);
+    if (err.response?.status === 401) {
+      localStorage.removeItem("authToken");
+    }
+  }
+};
+
+const fetchProduct = async () => {
+  try {
+    const res = await api.get(`/products/${route.params.id}`);
+    product.value = res.data;
+  } finally {
+    loading.value = false;
   }
 };
 
 onMounted(() => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  const app = document.getElementById("app");
+  if (app && app.scrollTo) {
+    app.scrollTo({ top: 0, behavior: "smooth" });
+  } else {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
   fetchProduct();
 });
 </script>
