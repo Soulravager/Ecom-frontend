@@ -82,8 +82,6 @@ const fetchProducts = async () => {
   try {
     const res = await api.get("/products");
     products.value = res.data;
-  } catch (error) {
-    console.error("Error fetching products:", error);
   } finally {
     loading.value = false;
   }
@@ -98,7 +96,6 @@ const addToCart = async (product) => {
 
   if (!token) {
     openModal("Login Required", "Please log in to add items to your cart.");
-    router.push("/login");
     return;
   }
 
@@ -110,15 +107,6 @@ const addToCart = async (product) => {
       quantity: 1,
     });
     openModal("Added to Cart", `${product.name} has been added to your cart!`);
-  } catch (err) {
-    console.error("Error adding to cart:", err);
-    if (err.response?.status === 401) {
-      openModal("Session Expired", "Please log in again.");
-      localStorage.removeItem("authToken");
-      router.push("/login");
-    } else {
-      openModal("Error", "Failed to add to cart. Try again later.");
-    }
   } finally {
     addingToCartId.value = null;
   }

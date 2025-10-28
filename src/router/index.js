@@ -23,6 +23,7 @@ const routes = [
   },
   { path: "/contact", name: "contact", component: Contact },
   { path: "/product", name: "product", component: Product },
+  { path: "/item/:id", name: "ProductShow", component: ProductShow },
   {
     path: "/login",
     name: "Login",
@@ -35,12 +36,7 @@ const routes = [
     component: Cart,
     meta: { requiresAuth: true },
   },
-  {
-    path: "/item/:id",
-    name: "ProductShow",
-    component: ProductShow,
-    meta: { requiresAuth: true },
-  },
+
   {
     path: "/admin",
     name: "Admin",

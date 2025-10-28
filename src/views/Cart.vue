@@ -151,9 +151,7 @@ const updateQuantity = async (item, newQty) => {
     );
     item.quantity = newQty;
     fetchCart();
-  } catch (err) {
-    console.error("Error updating cart:", err);
-  }
+  } catch (err) {}
 };
 
 const removeItem = async (id) => {
@@ -164,9 +162,7 @@ const removeItem = async (id) => {
     });
     cartItems.value = cartItems.value.filter((i) => i.id !== id);
     fetchCart();
-  } catch (err) {
-    console.error("Error removing item:", err);
-  }
+  } catch (err) {}
 };
 
 const goToPayment = () => {

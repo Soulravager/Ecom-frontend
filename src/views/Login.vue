@@ -14,7 +14,6 @@
         "
       />
 
-      <!-- Right Card -->
       <section
         class="flex flex-col items-center justify-center bg-white rounded-xl shadow-lg px-5 py-8 sm:px-8 sm:py-10 md:px-10 md:py-12 w-full md:w-[400px]"
       >
@@ -25,7 +24,6 @@
             {{ isLogin ? "Login to Your Account" : "Create a New Account" }}
           </h1>
 
-          <!-- Components -->
           <UserLogin v-if="isLogin" />
           <UserSignUP v-else />
 

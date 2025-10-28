@@ -5,7 +5,6 @@
         Checkout
       </h1>
 
-      <!-- Cart Summary -->
       <div v-if="cartItems.length" class="mb-8">
         <h2 class="text-xl font-semibold text-gray-800 mb-4">Your Cart</h2>
         <div
@@ -39,7 +38,6 @@
         </div>
       </div>
 
-      <!-- Payment -->
       <div v-if="cartItems.length" class="mt-8">
         <h2 class="text-xl font-semibold text-gray-800 mb-4">
           Select Payment Method

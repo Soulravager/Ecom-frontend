@@ -8,7 +8,6 @@
         Chat about {{ productName }}
       </h2>
 
-      <!-- Chat Box -->
       <div
         ref="chatContainer"
         class="h-80 overflow-y-auto border rounded-lg p-3 bg-gray-50 mb-4 scroll-smooth"
@@ -42,7 +41,6 @@
         </div>
       </div>
 
-      <!-- Input -->
       <div class="flex gap-2">
         <input
           v-model="input"

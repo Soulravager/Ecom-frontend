@@ -2,7 +2,6 @@
   <section
     class="min-h-screen px-6 py-12 md:px-16 lg:px-24 flex flex-col items-center"
   >
-    <!-- Header -->
     <div class="text-center mb-10">
       <h1 class="text-4xl md:text-5xl font-bold text-indigo-600 mb-3">
         Contact Us
@@ -12,11 +11,9 @@
       </p>
     </div>
 
-    <!-- Contact Container -->
     <div
       class="w-full max-w-5xl flex flex-col md:flex-row gap-8 md:gap-12 bg-white rounded-2xl shadow-lg p-6 md:p-10"
     >
-      <!-- Left Info Section -->
       <div class="flex-1 space-y-6">
         <h2 class="text-2xl font-semibold text-gray-800">Get in Touch</h2>
         <p class="text-gray-600 text-sm md:text-base leading-relaxed">
@@ -43,7 +40,6 @@
         </div>
       </div>
 
-      <!-- Right Form Section -->
       <div class="flex-1">
         <h2 class="text-2xl font-semibold text-gray-800 mb-4">
           Send a Message
@@ -207,7 +203,6 @@ const submitForm = async () => {
 
     form.value = { name: "", email: "", message: "" };
   } catch (error) {
-    console.error("Error sending message:", error);
     openModal(
       "Error",
       error.response?.data?.message ||

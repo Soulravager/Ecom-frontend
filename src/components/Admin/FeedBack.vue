@@ -133,7 +133,6 @@ const handleConfirm = async () => {
     await api.delete(`/contacts/${deleteId.value}`);
     feedbacks.value = feedbacks.value.filter((f) => f.id !== deleteId.value);
   } catch (err) {
-    console.error("Error deleting feedback:", err);
     openModal("Error", "Failed to delete feedback. Please try again later.");
     return;
   }

@@ -189,7 +189,6 @@
         </div>
       </div>
     </div>
-    <!-- delete model -->
     <div
       v-if="showDeleteModal"
       class="fixed inset-0 bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50"
@@ -326,9 +325,7 @@ const toggleRole = async (user) => {
         : `/users/${user.id}/assign-staff`;
     await api.patch(endpoint);
     await fetchUsers();
-  } catch (err) {
-    console.error("Error updating role:", err);
-  }
+  } catch (err) {}
 };
 
 const toggleAdmin = async (user) => {
@@ -339,9 +336,7 @@ const toggleAdmin = async (user) => {
         : `/users/${user.id}/assign-admin`;
     await api.patch(endpoint);
     await fetchUsers();
-  } catch (err) {
-    console.error("Error updating admin role:", err);
-  }
+  } catch (err) {}
 };
 
 const deleteUser = async () => {
@@ -352,7 +347,6 @@ const deleteUser = async () => {
     users.value = users.value.filter((u) => u.id !== userToDelete.value);
     closeDeleteModal();
   } catch (err) {
-    console.error("Error deleting user:", err);
     closeDeleteModal();
   }
 };
@@ -361,27 +355,6 @@ onMounted(fetchUsers);
 </script>
 
 <style scoped>
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-.animate-fade-in {
-  animation: fade-in 0.2s ease-out;
-}
-::-webkit-scrollbar {
-  height: 6px;
-}
-::-webkit-scrollbar-thumb {
-  background-color: rgba(156, 163, 175, 0.5);
-  border-radius: 8px;
-}
-
 @media (max-width: 767px) {
   td.p-2.border.text-center.space-x-2 {
     display: flex;

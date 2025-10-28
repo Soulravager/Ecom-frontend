@@ -4,7 +4,7 @@
       @click="$router.push('/product')"
       class="mb-4 flex items-center text-indigo-700 font-medium hover:text-indigo-800 transition"
     >
-      <backbtn />
+      <back_btn />
       Back to Products
     </button>
 
@@ -33,7 +33,6 @@
         No Image
       </div>
 
-      <!-- Details -->
       <div class="flex-1">
         <h1 class="text-2xl font-bold text-gray-800 mb-2">
           {{ product.name }}
@@ -86,7 +85,7 @@
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import api from "../../api/axios";
-import backbtn from "../../assets/component/backbtn.vue";
+import back_btn from "../../assets/component/backBtn.vue";
 import GeminiChat from "../Gemini/ProductChat.vue";
 import BaseModal from "../common/ModelPopup.vue";
 import useModal from "../common/ModelPopup";
@@ -121,10 +120,7 @@ const addToCart = async () => {
   } catch (err) {
     console.error("Error adding to cart:", err);
     if (err.response?.status === 401) {
-      openModal("Session Expired", "Please log in again.");
       localStorage.removeItem("authToken");
-    } else {
-      openModal("Error", "Failed to add to cart. Try again later.");
     }
   }
 };
@@ -133,9 +129,6 @@ const fetchProduct = async () => {
   try {
     const res = await api.get(`/products/${route.params.id}`);
     product.value = res.data;
-  } catch (err) {
-    console.error("Error fetching product:", err);
-    openModal("Error", "Failed to load product details. Please try again.");
   } finally {
     loading.value = false;
   }

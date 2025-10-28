@@ -89,8 +89,6 @@ const fetchUsers = async () => {
       isAdmin.value = false;
     }
   } catch (err) {
-    console.error("Error:", err);
-
     if (err.response?.status === 403) {
       isAdmin.value = false;
     }

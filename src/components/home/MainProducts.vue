@@ -14,9 +14,7 @@
       </a>
     </div>
 
-    <!-- Carousel -->
     <div class="relative flex items-center justify-center">
-      <!-- Left Arrow -->
       <button
         @click="prevSlide"
         class="absolute left-[-10px] md:left-[-25px] z-10 bg-indigo-600 text-white w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full shadow-md hover:bg-indigo-700 transition"
@@ -24,7 +22,6 @@
         <img src="../../assets/common/leftbtn.png" alt="Left" class="w-5 h-5" />
       </button>
 
-      <!--  MAIN -->
       <div class="overflow-hidden w-full">
         <div
           class="flex transition-transform duration-500 ease-in-out"
@@ -59,17 +56,12 @@
                     {{ product.name }}
                   </h3>
                 </center>
-                <!-- <p class="text-red-500 text-xs md:text-sm">
-                  ₹
-                  {{ product.category || "—" }}
-                </p> -->
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Right Arrow -->
       <button
         @click="nextSlide"
         class="absolute right-[-10px] md:right-[-25px] z-10 bg-indigo-600 text-white w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full shadow-md hover:bg-indigo-700 transition"
@@ -124,11 +116,8 @@ const fetchHotProducts = async () => {
       id: item.product_id,
       name: item.product_name,
       image: item.image ? `${item.image}` : "https://via.placeholder.com/150",
-      category: item.price || "Category not available",
     }));
-  } catch (error) {
-    console.error("Failed to load hot products:", error);
-  }
+  } catch (error) {}
 };
 
 onMounted(() => {

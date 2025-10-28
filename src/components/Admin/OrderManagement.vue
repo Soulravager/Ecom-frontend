@@ -7,7 +7,6 @@
       class="flex flex-col md:flex-row justify-between items-center mb-6 gap-3"
     >
       <div class="flex flex-col md:flex-row gap-3 w-full md:w-auto">
-        <!-- filters -->
         <input
           v-model="searchQuery"
           type="text"
@@ -199,9 +198,7 @@ const fetchOrders = async () => {
   try {
     const res = await api.get("/admin/orders");
     orders.value = res.data || [];
-  } catch (err) {
-    console.error("Error fetching orders:", err);
-  }
+  } catch (err) {}
 };
 
 const refreshOrders = async () => {
@@ -240,9 +237,7 @@ const updateOrderStatus = async () => {
 
     await fetchOrders();
     closeModal();
-  } catch (err) {
-    console.error("Error updating order:", err);
-  }
+  } catch (err) {}
 };
 
 const filteredOrders = computed(() => {

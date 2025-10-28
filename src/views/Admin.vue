@@ -111,7 +111,7 @@ const menuItems = [
 const currentComponent = computed(() => {
   return (
     components[activeTab.value] || {
-      template: `<div class='p-6 text-gray-700 text-center'>🚧 Under Construction...</div>`,
+      template: `<div class='p-6 text-gray-700 text-center'></div>`,
     }
   );
 });
