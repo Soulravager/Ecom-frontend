@@ -93,7 +93,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import api from "../api/axios";
-
 import BaseModal from "../components/common/ModelPopup.vue";
 import useModal from "../components/common/ModelPopup";
 
@@ -112,7 +111,6 @@ const fetchUserData = async () => {
     const { data } = await api.get("/user-data");
     userData.value = data.data;
   } catch (err) {
-    console.error("Error fetching user data:", err);
     openModal("Error", "Failed to load user data. Please try again.");
   }
 };
@@ -126,58 +124,51 @@ const fetchCart = async () => {
     cartItems.value = data.items;
     totalAmount.value = data.total_amount;
   } catch (err) {
-    console.error("Error loading cart:", err);
     openModal("Error", "Failed to load your cart. Please refresh.");
   }
 };
 
 const placeOrder = async () => {
   const token = localStorage.getItem("authToken");
-  if (!userData.value) {
-    await fetchUserData();
-  }
+  if (!userData.value) await fetchUserData();
 
   try {
     isProcessing.value = true;
 
-    const { data } = await api.post(
-      "/orders",
-      { payment_type: paymentType.value },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-
-    const order = data.order;
-
-    if (paymentType.value === "razorpay") {
-      openRazorpay(order, token);
-    } else {
+    if (paymentType.value === "cod") {
+      const { data } = await api.post(
+        "/orders",
+        { payment_type: "cod" },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       openModal("Order Placed", "Your Cash on Delivery order has been placed!");
       setTimeout(() => (window.location.href = "/profile"), 3000);
+      return;
     }
-  } catch (error) {
-    console.error("Error placing order:", error);
 
+    openRazorpay(token);
+  } catch (error) {
     openModal("Error", "Failed to place your order. Please try again.");
   } finally {
     isProcessing.value = false;
   }
 };
 
-const openRazorpay = (order, token) => {
+const openRazorpay = (token) => {
   const phone = userData.value?.phone_number || "";
 
   const options = {
     key: import.meta.env.VITE_RAZORPAY_KEY,
-    amount: order.total_amount * 100,
+    amount: totalAmount.value * 100,
     currency: "INR",
     name: "Shopee",
     description: "Payment for your order",
-    order_id: order.payment_id,
     handler: async function (response) {
       try {
         await api.post(
-          "/orders/verify",
+          "/orders",
           {
+            payment_type: "razorpay",
             razorpay_order_id: response.razorpay_order_id,
             razorpay_payment_id: response.razorpay_payment_id,
             razorpay_signature: response.razorpay_signature,
@@ -188,10 +179,13 @@ const openRazorpay = (order, token) => {
         openModal("Payment Successful", "Your order has been placed!");
         setTimeout(() => (window.location.href = "/profile"), 2000);
       } catch (err) {
-        console.error("Payment verification failed:", err);
-
         openModal("Payment Failed", "Payment verification failed. Try again.");
       }
+    },
+    modal: {
+      ondismiss: function () {
+        openModal("Payment Cancelled", "You cancelled the payment process.");
+      },
     },
     prefill: {
       name: user.value?.name || "Guest",
