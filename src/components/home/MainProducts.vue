@@ -51,11 +51,11 @@
               </router-link>
 
               <div class="p-4 text-left">
-                <center>
+                <div class="text-center">
                   <h3 class="font-semibold text-gray-700 text-sm md:text-base">
                     {{ product.name }}
                   </h3>
-                </center>
+                </div>
               </div>
             </div>
           </div>
